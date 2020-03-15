@@ -3,6 +3,8 @@ package com.example.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.form.LoginUserForm;
+
 /**
  * ログインする時のコントローラー.
  * 
@@ -27,7 +29,10 @@ public class LoginController {
 	 * @return 商品一覧画面
 	 */
 	@RequestMapping("/login")
-	public String login() {
+	public String login(LoginUserForm form) {
+		
 		return "item_list_noodle";
 	}
+
+
 }
