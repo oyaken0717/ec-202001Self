@@ -9,6 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import com.example.domain.User;
 
+/**
+ * ユーザー情報を登録するレポジトリ
+ * 
+ * @author oyamadakenji
+ *
+ */
 @Repository
 public class RegisterUserRepository {
 	
@@ -26,6 +32,11 @@ public class RegisterUserRepository {
 		return user;
 	};
 	
+	/**
+	 * ユーザー情報を登録する
+	 * 
+	 * @param user 登録するユーザーの情報が入ったオブジェクト
+	 */
 	public void insert(User user) {
 		String sql = "INSERT INTO users (name, email, password, zipcode, address, telephone) "
 				              + "VALUES (:name, :email, :password :zipcode, :address, :telephone)";

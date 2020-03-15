@@ -27,11 +27,17 @@ public class RegisterUserContorller {
 		return "register_user";
 	}
 	
+	/**
+	 * ユーザーを登録する
+	 * 
+	 * @param form 入力されたユーザー情報が入ったオブジェクト
+	 * @return
+	 */
 	@RequestMapping("/register")
 	public String register(RegisterUserForm form) {
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
-		System.out.println(user.toString());
+		
 		return "register_user";
 	}
 }
