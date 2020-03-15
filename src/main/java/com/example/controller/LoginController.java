@@ -18,7 +18,16 @@ public class LoginController {
 	 * @return ログイン画面
 	 */
 	@RequestMapping("/to-login")
-	public String login() {
+	public String toLogin() {
 		return "login";
+	}
+
+	/**
+	 * ログイン認証をする
+	 * @return 商品一覧
+	 */
+	@RequestMapping("/login")
+	public String login() {
+		return "item_list_noodle";
 	}
 }
