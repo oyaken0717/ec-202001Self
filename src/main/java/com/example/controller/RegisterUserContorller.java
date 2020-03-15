@@ -22,4 +22,10 @@ public class RegisterUserContorller {
 	public String toRegister() {
 		return "register_user";
 	}
+	
+	@RequestMapping("/register")
+	public String register() {
+		
+		return "register_user";
+	}
 }
