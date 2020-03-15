@@ -24,7 +24,7 @@ public class LoginController {
 
 	/**
 	 * ログイン認証をする
-	 * @return 商品一覧
+	 * @return 商品一覧画面
 	 */
 	@RequestMapping("/login")
 	public String login() {
