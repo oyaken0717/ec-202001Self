@@ -39,7 +39,7 @@ public class RegisterUserRepository {
 	 */
 	public void insert(User user) {
 		String sql = "INSERT INTO users (name, email, password, zipcode, address, telephone) "
-				              + "VALUES (:name, :email, :password :zipcode, :address, :telephone)";
+				              + "VALUES (:name, :email, :password, :zipcode, :address, :telephone)";
 		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
 		template.update(sql, param);
 	}
