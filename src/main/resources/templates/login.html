@@ -51,7 +51,7 @@
 							<legend>
 								ログイン
 							</legend>
-							<label class="control-label" style="color: red" for="inputError">メールアドレス、またはパスワードが間違っています</label>
+							<label th:if="${errorMessage}" th:text="${errorMessage}" class="control-label" style="color: red" for="inputError">メールアドレス、またはパスワードが間違っています</label>
 							<div class="form-group">
 								<label for="inputEmail">メールアドレス:</label>
 								<input type="text" name="email" id="inputEmail" class="form-control" placeholder="Email">

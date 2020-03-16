@@ -43,6 +43,6 @@ public class RegisterUserContorller {
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
 		registerUserService.insert(user);
-		return "redirect:/to-login";
+		return "redirect:/login-user/to-login";
 	}
 }

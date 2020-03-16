@@ -1,9 +1,9 @@
 package com.example.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.example.form.LoginUserForm;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * ログインする時のコントローラー.
@@ -12,7 +12,7 @@ import com.example.form.LoginUserForm;
  *
  */
 @Controller
-@RequestMapping("")
+@RequestMapping("/login-user")
 public class LoginController {
 	
 	/**
@@ -20,19 +20,21 @@ public class LoginController {
 	 * @return ログイン画面
 	 */
 	@RequestMapping("/to-login")
-	public String toLogin() {
+	public String toLogin(Model model,@RequestParam(required = false) String error) {
+	//■「@RequestParam(required = false) String error」
+	//> リクエストパラメータ(error)が何も入力されなかった場合 > 値にnullが設定されます。	
+		if (error != null) {
+			model.addAttribute("errorMessage","メールアドレス、またはパスワードが間違っています");
+		}
 		return "login";
 	}
 
 	/**
-	 * ログイン認証をする
+	 * ログアウトをする
 	 * @return 商品一覧画面
 	 */
-	@RequestMapping("/login")
-	public String login(LoginUserForm form) {
-		
-		return "item_list_noodle";
+	@RequestMapping("/logout")
+	public String logout() {
+		return "item_list_noodle2";
 	}
-
-
 }

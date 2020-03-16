@@ -34,8 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers("/css/**", 
 									"/img/**", 
 									"/js/**", 
-									"/fonts/**", 
-									"/img_noodle/**");
+									"/fonts/**" 
+									);
 	}
 
 	@Override
@@ -57,13 +57,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			//■ログインに関する設定(「ログイン認証メソッドだけ」をこっちに移動させたイメージ！！！！！！！！！！！！！！！！！！！！！)
 			//■③ログイン画面に遷移させるパス
 			// > ログインされていないとこのパスに遷移される。
-			.loginPage("/to-login") 
-			//■④「?error=true」がURLに表示 > メソッドでキャッチしてエラー文を出す。
-			.failureUrl("/to-login/?error=true") 
+			.loginPage("/login-user/to-login")
 			//■⑤ログインボタンを押した際に遷移させるパス(ここに遷移させれば自動的にログインが行われる！！！！！！！！！！！！！！！！！)
 			.loginProcessingUrl("/login") 
-			//■⑥ログイン失敗に遷移させるパス
-			// > 第1引数:ログイン成功時に遷移させるパス
+
+			//■④ログイン失敗に遷移させるパス >「?error=true」がURLに表示 > メソッドでキャッチしてエラー文を出す。
+			.failureUrl("/login-user/to-login/?error=true") 
+
+			//■⑥
+			// > 第1引数: ログイン成功時に遷移させるパス
 			// > 第2引数: true :認証後 > 第1引数のパスに遷移
 			// > 第2引数: false:認証されてない > 一度ログイン画面に飛ばされる > ログインしたら「本来遷移するはずだったURL」に遷移
 			.defaultSuccessUrl("/", false)
@@ -75,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //■ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 		http.logout()
 			//■ログアウトさせる際に遷移させるパス
-			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+			.logoutRequestMatcher(new AntPathRequestMatcher("/login-user/logout"))
 			//■ログアウト後に遷移させるパス(ここでは商品一覧画面を設定)
 			.logoutSuccessUrl("/") 
 			//■ログアウト後、Cookieに保存されているセッションIDを削除
@@ -85,18 +87,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.invalidateHttpSession(true);
 	}
 
-	//■bcryptアルゴリズムでパスワードをハッシュ化したオブジェクトを返します.
-	//@Autowired
-	//private PasswordEncoder passwordEncoder;
-	//と記載する > DIされる。
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-    	return new BCryptPasswordEncoder();
-    }
-	 
 	//■認証ユーザを取得する「UserDetailsService」の設定
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(memberDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+	}
+	 
+	//■bcryptアルゴリズムでパスワードをハッシュ化したオブジェクトを返します.
+	//@Autowired
+	//private PasswordEncoder passwordEncoder;
+	//と記載する > DIされる。
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }
