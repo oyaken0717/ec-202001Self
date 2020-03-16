@@ -1,5 +1,11 @@
 package com.example.domain;
 
+/**
+ * 商品情報を入れるドメイン.
+ * 
+ * @author oyamadakenji
+ *
+ */
 public class Item {
 	
 	/** id */
