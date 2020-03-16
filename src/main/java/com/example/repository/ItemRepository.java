@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.Item;
@@ -43,4 +45,18 @@ public class ItemRepository {
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 		return itemList;
 	}
+	
+	/**
+	 * idから商品を見つける.
+	 * 
+	 * @param id 商品一覧から流れてくるid情報
+	 * @return 商品の情報
+	 */
+	public Item load(Integer id) {
+		String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items WHERE id = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		Item item = template.queryForObject(sql, param, ITEM_ROW_MAPPER);
+		return item;
+	}
+
 }
