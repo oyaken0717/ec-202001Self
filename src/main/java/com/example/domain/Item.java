@@ -1,5 +1,7 @@
 package com.example.domain;
 
+import java.util.List;
+
 /**
  * 商品情報を入れるドメイン.
  * 
@@ -22,7 +24,9 @@ public class Item {
 	private String imagePath;
 	/** 削除フラグ */
 	private Boolean deleted;
-
+	/** 全てのトッピング */
+	private List<Topping> toppingList;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -65,9 +69,15 @@ public class Item {
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
+	public List<Topping> getToppingList() {
+		return toppingList;
+	}
+	public void setToppingList(List<Topping> toppingList) {
+		this.toppingList = toppingList;
+	}
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", description=" + description + ", priceM=" + priceM + ", priceL="
-				+ priceL + ", imagePath=" + imagePath + ", deleted=" + deleted + "]";
+				+ priceL + ", imagePath=" + imagePath + ", deleted=" + deleted + ", toppingList=" + toppingList + "]";
 	}
 }
