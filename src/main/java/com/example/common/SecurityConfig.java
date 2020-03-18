@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// > ログインされていないとこのパスに遷移される。
 			.loginPage("/login-user/to-login")
 			//■⑤ログインボタンを押した際に遷移させるパス(ここに遷移させれば自動的にログインが行われる！！！！！！！！！！！！！！！！！)
+//			.loginProcessingUrl("/login-user/login") 
 			.loginProcessingUrl("/login") 
 
 			//■④ログイン失敗に遷移させるパス >「?error=true」がURLに表示 > メソッドでキャッチしてエラー文を出す。
@@ -77,8 +78,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 //■ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 		http.logout()
-			//■ログアウトさせる際に遷移させるパス
-			.logoutRequestMatcher(new AntPathRequestMatcher("/login-user/logout"))
+			//■ログアウトする際に遷移するパス(こっちも自動)
+			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 			//■ログアウト後に遷移させるパス(ここでは商品一覧画面を設定)
 			.logoutSuccessUrl("/") 
 			//■ログアウト後、Cookieに保存されているセッションIDを削除

@@ -28,13 +28,4 @@ public class LoginController {
 		}
 		return "login";
 	}
-
-	/**
-	 * ログアウトをする
-	 * @return 商品一覧画面
-	 */
-	@RequestMapping("/logout")
-	public String logout() {
-		return "item_list_noodle2";
-	}
 }

@@ -1,8 +1,11 @@
 package com.example.repository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
@@ -31,16 +34,21 @@ public class LoginUserRepository {
 		user.setTelephone(rs.getString("telephone"));
 		return user;
 	};
-	
+		
 	/**
-	 * ユーザー情報を登録する
+	 * メールアドレスからユーザー情報を取得する.
 	 * 
-	 * @param user 登録するユーザーの情報が入ったオブジェクト
+	 * @param email ログイン画面で入力されたメールアドレス
+	 * @return 登録されたユーザー情報 or null(見つからなかった場合)
 	 */
-	public void insert(User user) {
-		String sql = "INSERT INTO users (name, email, password, zipcode, address, telephone) "
-				              + "VALUES (:name, :email, :password, :zipcode, :address, :telephone)";
-		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
-		template.update(sql, param);
+	public User findByEmail(String email) {
+		String sql = "select id, name, email, password, zipcode, address, telephone from users where email=:email";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
+		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);
+		if (userList.size() == 0) {
+			return null;
+		}
+		return userList.get(0);
 	}
+
 }
