@@ -2,6 +2,8 @@ package com.example.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ public class ItemListController {
 	@Autowired
 	private ItemService itemService; 
 	
+	@Autowired
+	private HttpSession session;
 	/**
 	 * 商品一覧画面へ.
 	 * 
@@ -25,6 +29,10 @@ public class ItemListController {
 	 */
 	@RequestMapping("")
 	public String showItemList(Model model) {
+		System.out.println("セッション一覧");
+		System.out.println(session.getAttributeNames().hasMoreElements());
+		System.out.println(session.getId());
+		
 		List<Item> itemList = itemService.findAll();
 		model.addAttribute("itemList", itemList);
 		return "item_list_noodle";

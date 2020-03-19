@@ -24,6 +24,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+//■https://terasolunaorg.github.io/guideline/public_review/Security/Authentication.html
+//■^ 6.3.1.1の図を使った説明 1~7
 
 	@Autowired
 	private UserDetailsService memberDetailsService;
