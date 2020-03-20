@@ -26,19 +26,20 @@ public class CartContorller {
 	//  Principalオブジェクト内のLoginUserを引っ張ってくる。
 	@RequestMapping("/add-cart")
 	public String addCart(CartForm form, @AuthenticationPrincipal LoginUser loginUser) {
-		//■ログインしていない場合 > セッション自体のIDをuserIdにいれとく
-		//　※文字列化している > hashCode()で数値化する。		
-		Integer userId = session.getId().hashCode();
-		if (loginUser != null) {
-			//■ログインしている。 > そこからuserのIDを取ってくる。			
-			userId = loginUser.getUser().getId();
-		}
-		cartService.insert(form, userId);
+//		//■ログインしていない場合 > セッション自体のIDをuserIdにいれとく
+//		//　※文字列化している > hashCode()で数値化する。		
+//		Integer userId = session.getId().hashCode();
+//		if (loginUser != null) {
+//			//■ログインしている。 > そこからuserのIDを取ってくる。			
+//			userId = loginUser.getUser().getId();
+//		}
+//		cartService.insert(form, userId);
+		System.out.println(form);
 		return "redirect:/cart/show-cart-list";
 	}
 
 	@RequestMapping("/show-cart-list")
-	public String showCartList(CartForm form, @AuthenticationPrincipal LoginUser loginUser) {
+	public String showCartList() {
 		return "cart_list";
 	}
 }

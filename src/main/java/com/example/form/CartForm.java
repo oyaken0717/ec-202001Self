@@ -12,10 +12,13 @@ public class CartForm {
 	
 	/** 商品ID(ラーメン) */
 	private Integer itemId;
+	
 	/** サイズ */
 	private String size;
+	
 	/** 選択したトッピング */
 	private List<Integer> orderToppingList;
+	
 	/** 数量 */
 	private Integer quantity;
 	
