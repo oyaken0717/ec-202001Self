@@ -11,6 +11,7 @@ import com.example.domain.OrderTopping;
 import com.example.form.CartForm;
 import com.example.repository.OrderItemRepository;
 import com.example.repository.OrderRepository;
+import com.example.repository.OrderToppingRepositry;
 
 /**
  * 注文に関する情報を扱うサービス.
@@ -27,6 +28,9 @@ public class CartService {
 	
 	@Autowired
 	private OrderItemRepository orderItemRepository;
+	
+	@Autowired
+	private OrderToppingRepositry orderToppingRepositry;
 	/**
 	 * カートの情報を作るメソッド.
 	 * 
@@ -50,13 +54,13 @@ public class CartService {
 		orderItem = orderItemRepository.save(orderItem);
 		
 		//■Order(カート)に注文トッピングを挿入
-		if (form.getOrderToppingList() == null) {
+		if (form.getOrderToppingList() != null) {
 			//■コンソール：orderToppingList=[1, 2]　>　トッピングのIDがListで入ってる。  
 			for (Integer orderToppingId : form.getOrderToppingList()) {
 				OrderTopping orderTopping = new OrderTopping();
 				orderTopping.setToppingId(orderToppingId);
 				orderTopping.setOrderItemId(orderItem.getId());
-				
+				orderToppingRepositry.insert(orderTopping);
 			}
 		}	
 	}

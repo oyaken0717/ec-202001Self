@@ -40,6 +40,15 @@ public class OrderRepository {
 		insert = withTableName.usingGeneratedKeyColumns("id");
 	}
 
+//	initってこれじゃダメなの？
+//	@PostConstruct
+//	public void init() {
+//		insert = new SimpleJdbcInsert((JdbcTemplate)template.getJdbcTemplate());
+//		insert = insert.withTableName("order_toppings");
+//		insert = insert.usingGeneratedKeyColumns("id");
+//	insert = insert.withTableName("order_toppings").usingGeneratedKeyColumns(columnNames);
+//	}
+
 	public Order save(Order order) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		if (order.getId() == null) {

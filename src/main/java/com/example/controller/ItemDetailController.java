@@ -42,8 +42,6 @@ public class ItemDetailController {
 	 */
 	@RequestMapping("/show-detail")
 	public String showDetail(Integer id, Model model) {
-		System.out.println("セッション詳細");
-		System.out.println(session.getAttributeNames());
 		Item item = itemService.load(id);
 		List<Topping> toppingList = toppingService.findAll();
 		item.setToppingList(toppingList);
