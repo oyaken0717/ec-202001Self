@@ -16,7 +16,8 @@ import com.example.domain.User;
 import com.example.repository.LoginUserRepository;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl2 implements UserDetailsService {
+//	public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	private LoginUserRepository LoginUserRepository;

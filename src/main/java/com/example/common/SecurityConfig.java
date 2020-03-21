@@ -8,10 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.example.service.UDSImplement;
 
 /**
  * ログイン認証用設定.
@@ -28,7 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //■^ 6.3.1.1の図を使った説明 1~7
 
 	@Autowired
-	private UserDetailsService memberDetailsService;
+	private UDSImplement uds;
+//	private UDSImplement memberDetailsService;
+//	private UserDetailsServiceImpl memberDetailsService;
 
 //■「セキュリティ設定」を無視する設定
 	@Override
@@ -94,7 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	//■認証ユーザを取得する「UserDetailsService」の設定
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(memberDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(uds).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	 
 	//■bcryptアルゴリズムでパスワードをハッシュ化したオブジェクトを返します.
