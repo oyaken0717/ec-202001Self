@@ -20,11 +20,11 @@ public class UDSImplement implements UserDetailsService {
 //	public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private LoginUserRepository LoginUserRepository;
+	private LoginUserRepository loginUserRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		User user = LoginUserRepository.findByEmail(email);
+		User user = loginUserRepository.findByEmail(email);
 
 		Collection<GrantedAuthority> authorityList = new ArrayList<>();
 		authorityList.add(new SimpleGrantedAuthority("ROLE_USER")); // ユーザ権限付与

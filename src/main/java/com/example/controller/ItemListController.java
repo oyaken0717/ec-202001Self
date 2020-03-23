@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ public class ItemListController {
 	
 	@Autowired
 	private HttpSession session;
+	
 	/**
 	 * 商品一覧画面へ.
 	 * 
@@ -28,11 +31,7 @@ public class ItemListController {
 	 * @return 商品一覧画面
 	 */
 	@RequestMapping("")
-	public String showItemList(Model model) {
-		System.out.println("セッション一覧");
-		System.out.println(session.getAttributeNames().hasMoreElements());
-		System.out.println(session.getId());
-		
+	public String showItemList(Model model) {			
 		List<Item> itemList = itemService.findAll();
 		model.addAttribute("itemList", itemList);
 		return "item_list_noodle";

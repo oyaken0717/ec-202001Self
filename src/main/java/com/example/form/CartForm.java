@@ -14,35 +14,42 @@ public class CartForm {
 	private Integer itemId;
 	
 	/** サイズ */
-	private String size;
+	private Character size;
 	
 	/** 選択したトッピング */
 	private List<Integer> orderToppingList;
 	
 	/** 数量 */
 	private Integer quantity;
-	
+
 	public Integer getItemId() {
 		return itemId;
 	}
+
 	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
-	public String getSize() {
+
+	public Character getSize() {
 		return size;
 	}
-	public void setSize(String size) {
+
+	public void setSize(Character size) {
 		this.size = size;
 	}
+
 	public List<Integer> getOrderToppingList() {
 		return orderToppingList;
 	}
+
 	public void setOrderToppingList(List<Integer> orderToppingList) {
 		this.orderToppingList = orderToppingList;
 	}
+
 	public Integer getQuantity() {
 		return quantity;
 	}
+
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
@@ -50,5 +57,5 @@ public class CartForm {
 	public String toString() {
 		return "CartForm [itemId=" + itemId + ", size=" + size + ", orderToppingList=" + orderToppingList
 				+ ", quantity=" + quantity + "]";
-	}	
+	}
 }

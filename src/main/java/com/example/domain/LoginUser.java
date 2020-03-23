@@ -11,6 +11,9 @@ import org.springframework.security.core.GrantedAuthority;
  *
  */
 public class LoginUser  extends org.springframework.security.core.userdetails.User{
+	//■Userクラスが同じプロジェクト内にあって、インスタンス化された場合
+	// > パソコンからするとどちらのUserドメインから作ったかわからない。
+	// > 「serialVersionUID = 1L」という変数を持たせて差別化している。 
 	private static final long serialVersionUID = 1L;
 	/** User情報 */
 	private final User user;

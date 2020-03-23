@@ -11,6 +11,7 @@ import com.example.domain.OrderTopping;
 import com.example.form.CartForm;
 import com.example.repository.OrderItemRepository;
 import com.example.repository.OrderRepository;
+//import com.example.repository.OrderRepository;
 import com.example.repository.OrderToppingRepositry;
 
 /**
@@ -22,46 +23,76 @@ import com.example.repository.OrderToppingRepositry;
 @Service
 @Transactional
 public class CartService {
-	
+
 	@Autowired
 	private OrderRepository orderRepository;
-	
+
 	@Autowired
 	private OrderItemRepository orderItemRepository;
-	
+
 	@Autowired
 	private OrderToppingRepositry orderToppingRepositry;
+
 	/**
 	 * カートの情報を作るメソッド.
 	 * 
-	 * @param form 商品詳細画面の「カートに入れる」ボタンを押して流れてきForm
+	 * @param form   商品詳細画面の「カートに入れる」ボタンを押して流れてきForm
 	 * @param userId ログインユーザーのID or 仮のsessionからのID
 	 */
 	public void insert(CartForm form, Integer userId) {
+		Order preOrder = orderRepository.findByUserIdAndStatus(userId, 0);
+		if (preOrder == null) {
+			// ■Order(カート)を挿入
+			Order order = new Order();
+			// ■この3つはnot null制約
+			order.setUserId(userId);
+			order.setStatus(0);
+			order.setTotalPrice(0);
+			order = orderRepository.save(order);
 
-		//■Order(カート)を挿入
-		Order order = new Order();
-		//■この3つはnot null制約		
-		order.setUserId(userId);
-		order.setStatus(0);
-		order.setTotalPrice(0);
-		order = orderRepository.save(order);
-		
-		//■Order(カート)に注文商品を挿入
-		OrderItem orderItem = new OrderItem();
-		BeanUtils.copyProperties(form, orderItem);
-		orderItem.setOrderId(order.getId());
-		orderItem = orderItemRepository.save(orderItem);
-		
-		//■Order(カート)に注文トッピングを挿入
-		if (form.getOrderToppingList() != null) {
-			//■コンソール：orderToppingList=[1, 2]　>　トッピングのIDがListで入ってる。  
-			for (Integer orderToppingId : form.getOrderToppingList()) {
-				OrderTopping orderTopping = new OrderTopping();
-				orderTopping.setToppingId(orderToppingId);
-				orderTopping.setOrderItemId(orderItem.getId());
-				orderToppingRepositry.insert(orderTopping);
+			// ■Order(カート)に注文商品を挿入
+			OrderItem orderItem = new OrderItem();
+			BeanUtils.copyProperties(form, orderItem);
+			orderItem.setOrderId(order.getId());
+			orderItem = orderItemRepository.save(orderItem);
+
+			// ■Order(カート)に注文トッピングを挿入
+			if (form.getOrderToppingList() != null) {
+				// ■コンソール：orderToppingList=[1, 2] > トッピングのIDがListで入ってる。
+				for (Integer orderToppingId : form.getOrderToppingList()) {
+					OrderTopping orderTopping = new OrderTopping();
+					orderTopping.setToppingId(orderToppingId);
+					orderTopping.setOrderItemId(orderItem.getId());
+					orderToppingRepositry.insert(orderTopping);
+				}
 			}
-		}	
+		} else if (preOrder.getStatus() == 0) {
+			// ■Order(カート)に注文商品を挿入
+			OrderItem orderItem = new OrderItem();
+			BeanUtils.copyProperties(form, orderItem);
+			orderItem.setOrderId(preOrder.getId());
+			orderItem = orderItemRepository.save(orderItem);
+
+			// ■Order(カート)に注文トッピングを挿入
+			if (form.getOrderToppingList() != null) {
+				// ■コンソール：orderToppingList=[1, 2] > トッピングのIDがListで入ってる。
+				for (Integer orderToppingId : form.getOrderToppingList()) {
+					OrderTopping orderTopping = new OrderTopping();
+					orderTopping.setToppingId(orderToppingId);
+					orderTopping.setOrderItemId(orderItem.getId());
+					orderToppingRepositry.insert(orderTopping);
+				}
+			}
+		}
 	}
+
+	public Order showCartList(Integer userId, Integer status) {
+		Order order = orderRepository.findByUserIdAndStatus(userId, status);
+		return order;
+	}
+	
+	public void delteOrderItem(Integer orderItemId) {
+		orderRepository.deleteyId(orderItemId);
+	}
+
 }

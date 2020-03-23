@@ -30,9 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UDSImplement uds;
-//	private UDSImplement memberDetailsService;
-//	private UserDetailsServiceImpl memberDetailsService;
-
+	
 //■「セキュリティ設定」を無視する設定
 	@Override
 	public void configure(WebSecurity web) throws Exception {
@@ -97,6 +95,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	//■認証ユーザを取得する「UserDetailsService」の設定
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		//■uds ①user(DBから)と②authorityListトークン(ログイン画面からのパスワードとメールアドレス)の情報から
+		//マッチさせる。 > マッチできなかった場合エラー > /login-user/to-login/?error=true へ遷移
 		auth.userDetailsService(uds).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	 
