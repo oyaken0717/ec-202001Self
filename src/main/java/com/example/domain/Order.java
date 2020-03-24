@@ -43,10 +43,11 @@ public class Order {
 	/** 注文した商品の情報 */
 	private List<OrderItem> orderItemList;
 	
-	public Integer getTax() {
+	public Integer getCalcTotalPrice() {
 		return 1;
 	}
-	public Integer getCalcTotalPrice() {
+
+	public Integer getTax() {
 		return 1;
 	}
 //■ーーーーーーーーーーーーーーーーーーーーーーーーーーー	

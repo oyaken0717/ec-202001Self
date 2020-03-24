@@ -59,7 +59,7 @@ public class CartContorller {
 	
 	@RequestMapping("/delte-order-item")
 	public String delteOrderItem(int orderItemId) {
-		
+		cartService.delteOrderItem(orderItemId);
 		return "redirect:/cart/show-cart-list";
 	}
 }

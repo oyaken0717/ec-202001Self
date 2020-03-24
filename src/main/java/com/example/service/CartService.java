@@ -92,7 +92,7 @@ public class CartService {
 	}
 	
 	public void delteOrderItem(Integer orderItemId) {
-		orderRepository.deleteyId(orderItemId);
+		orderRepository.deleteById(orderItemId);
 	}
 
 }

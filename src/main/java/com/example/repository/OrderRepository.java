@@ -42,13 +42,13 @@ public class OrderRepository {
 		List<OrderItem> orderItemList = new ArrayList<>();
 		List<OrderTopping> orderToppingList = new ArrayList<>();
 		List<Topping> toppingList = new ArrayList<>();
-		
+
 		int beforeOrderId = 0;
 		int firstOrderItemId = 0;
-		
+
 		while (rs.next()) {
-			int nowOrderId = rs.getInt("order_id");//■o.id 注文ID
-			if(nowOrderId != beforeOrderId) {
+			int nowOrderId = rs.getInt("order_id");// ■o.id 注文ID
+			if (nowOrderId != beforeOrderId) {
 				order = new Order();
 				orderItemList = new ArrayList<>();
 				order.setId(rs.getInt("order_id"));
@@ -66,12 +66,12 @@ public class OrderRepository {
 				order.setOrderItemList(orderItemList);
 				orderList.add(order);
 			}
-			if(rs.getInt("orderitem_id") != firstOrderItemId && rs.getInt("orderitem_id") != beforeOrderId) {	
+			if (rs.getInt("orderitem_id") != firstOrderItemId && rs.getInt("orderitem_id") != beforeOrderId) {
 				OrderItem orderItem = new OrderItem();
 				Item item = new Item();
 				toppingList = new ArrayList<>();
 				orderToppingList = new ArrayList<>();
-				
+
 				orderItemList.add(orderItem);
 				orderItem.setId(rs.getInt("orderitem_id"));
 				orderItem.setItemId(rs.getInt("orderitem_item_id"));
@@ -80,7 +80,7 @@ public class OrderRepository {
 				orderItem.setSize(rs.getString("orderitem_size").toCharArray()[0]);
 				orderItem.setItem(item);
 				orderItem.setOrderToppingList(orderToppingList);
-				
+
 				item.setId(rs.getInt("item_id"));
 				item.setName(rs.getString("item_name"));
 				item.setDescription(rs.getString("item_description"));
@@ -90,7 +90,7 @@ public class OrderRepository {
 				item.setDeleted(rs.getBoolean("item_deleted"));
 				item.setToppingList(toppingList);
 			}
-			if(rs.getInt("order_topping_id")!= 0) {
+			if (rs.getInt("order_topping_id") != 0) {
 				OrderTopping orderTopping = new OrderTopping();
 				Topping topping = new Topping();
 				toppingList.add(topping);
@@ -99,14 +99,14 @@ public class OrderRepository {
 				orderTopping.setToppingId(rs.getInt("topping_id"));
 				orderTopping.setOrderItemId(rs.getInt("order_item_id"));
 				orderTopping.setTopping(topping);
-				
+
 				topping.setId(rs.getInt("topping_id"));
 				topping.setName(rs.getString("topping_name"));
 				topping.setPriceM(rs.getInt("topping_price_m"));
 				topping.setPriceL(rs.getInt("topping_price_l"));
 			}
 			firstOrderItemId = rs.getInt("orderitem_id");
-			beforeOrderId = rs.getInt("order_id");	
+			beforeOrderId = rs.getInt("order_id");
 		}
 		return orderList;
 	};
@@ -149,23 +149,26 @@ public class OrderRepository {
 		sql.append("i.price_l item_price_l,i.image_path item_image_path,i.deleted item_deleted,");
 //■注文(長い)
 		sql.append("o.id order_id,o.user_id order_user_id,o.status order_status,o.total_price order_total_price,");
-		sql.append("o.order_date order_date,o.destination_name order_destination_name,o.destination_email order_destination_email,");
+		sql.append(
+				"o.order_date order_date,o.destination_name order_destination_name,o.destination_email order_destination_email,");
 		sql.append("o.destination_zipcode order_destination_zipcode,o.destination_address order_destination_address,");
-		sql.append("o.destination_tel order_destination_tel,o.delivery_time order_delivery_time,o.payment_method order_payment_method,");
+		sql.append(
+				"o.destination_tel order_destination_tel,o.delivery_time order_delivery_time,o.payment_method order_payment_method,");
 //■注文商品
-		sql.append("oi.id orderitem_id,oi.item_id orderitem_item_id,oi.order_id orderitem_order_id, oi.quantity orderitem_quantity,oi.size orderitem_size,");
+		sql.append(
+				"oi.id orderitem_id,oi.item_id orderitem_item_id,oi.order_id orderitem_order_id, oi.quantity orderitem_quantity,oi.size orderitem_size,");
 //■注文トッピング
-		sql.append("ot.id order_topping_id,ot.topping_id topping_id,ot.order_item_id order_item_id,");		
+		sql.append("ot.id order_topping_id,ot.topping_id topping_id,ot.order_item_id order_item_id,");
 //■トッピング
 		sql.append("t.name topping_name,t.price_m topping_price_m,t.price_l topping_price_l ");
 //■FROM ①INNER JOIN > 左と右のテーブルがあるのが前提 > 無いとエラー 
-		sql.append("FROM orders o JOIN order_items oi ON o.id = oi.order_id ");		
+		sql.append("FROM orders o JOIN order_items oi ON o.id = oi.order_id ");
 // ②LEFT OUTER JOIN > 基本LEFT OUTER JOINでOK > 左側に右側をくっつける > 右なくてもエラーにならない。 
 		sql.append("LEFT OUTER JOIN order_toppings ot ON oi.id = ot.order_item_id ");
 		sql.append("INNER JOIN items i ON oi.item_id = i.id LEFT OUTER JOIN toppings t ON ot.topping_id = t.id ");
 //■WHERE
 		sql.append("WHERE o.user_id = :user_id AND o.status = :status ORDER BY oi.id");
-		
+
 		SqlParameterSource param = new MapSqlParameterSource().addValue("user_id", userId).addValue("status", status);
 		List<Order> orderList = template.query(sql.toString(), param, ORDER_RESULT_SET_EXTRACTOR);
 		if (orderList.size() > 0) {
@@ -173,4 +176,12 @@ public class OrderRepository {
 		}
 		return null;
 	}
+
+	public void deleteById(Integer id) {
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id",id);
+		String sql = "WITH deleted AS (DELETE FROM order_items WHERE id = :id RETURNING id)"
+				+ "DELETE FROM order_toppings WHERE order_item_id IN (SELECT id FROM deleted)";
+		template.update(sql, param);
+	}
+
 }
