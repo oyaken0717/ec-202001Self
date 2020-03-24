@@ -17,7 +17,7 @@ public class OrderForm {
 	/** 配達日 */
 	private String deliveryDate;
 	/** 配達時間 */
-	private Timestamp deliveryTime;
+	private String deliveryTime;
 	/** 支払方法 */
 	private Integer paymentMethod;
 	
@@ -57,10 +57,10 @@ public class OrderForm {
 	public void setDeliveryDate(String deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
-	public Timestamp getDeliveryTime() {
+	public String getDeliveryTime() {
 		return deliveryTime;
 	}
-	public void setDeliveryTime(Timestamp deliveryTime) {
+	public void setDeliveryTime(String deliveryTime) {
 		this.deliveryTime = deliveryTime;
 	}
 	public Integer getPaymentMethod() {

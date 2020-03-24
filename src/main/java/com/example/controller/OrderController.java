@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.LoginUser;
 import com.example.domain.Order;
+import com.example.form.OrderForm;
 import com.example.service.CartService;
 
 /**
@@ -53,7 +54,8 @@ public class OrderController {
 	 * @return toOrderFinish()メソッドへ
 	 */
 	@RequestMapping("/decide")
-	public String decide() {
+	public String decide(OrderForm form) {
+		System.out.println(form.toString());
 		return "redirect:/order/to-order-finish";
 	}
 	
