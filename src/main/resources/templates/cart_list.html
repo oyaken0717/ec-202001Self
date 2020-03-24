@@ -103,7 +103,7 @@
 								</ul>
 							</td>
 							<td>
-								<div class="text-center">3,280円</div>
+								<div th:text="${orderItem.getSubTotal() + '円'}"class="text-center">3,280</div>
 							</td>
 							<td>
 								<div class="text-center">
@@ -131,9 +131,8 @@
 		<div class="row">
 			<div class="col-xs-offset-5 col-xs-3">
 				<div class="form-group">
-					<form action="order_confirm.html">
-						<input class="form-control btn btn-warning btn-block"
-							type="submit" value="注文に進む">
+					<form th:action="@{/order/to-order-confirm}">
+						<input class="form-control btn btn-warning btn-block" type="submit" value="注文に進む">
 					</form>
 				</div>
 			</div>
