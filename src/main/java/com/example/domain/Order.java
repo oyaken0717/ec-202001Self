@@ -43,12 +43,23 @@ public class Order {
 	/** 注文した商品の情報 */
 	private List<OrderItem> orderItemList;
 	
+	/**
+	 * 注文商品Listから各注文商品の合計金額を取ってきて総合金額にプラスしていく。
+	 * 
+	 * @return
+	 */
 	public Integer getCalcTotalPrice() {
-		return 1;
+		Integer totalPrice = 0;
+		for (OrderItem orderItem : orderItemList) {
+			totalPrice += orderItem.getSubTotal();
+		}
+		return totalPrice;
 	}
 
 	public Integer getTax() {
-		return 1;
+		Integer totalPrice = this.getCalcTotalPrice();
+		Integer tax =  (int) (totalPrice * 0.1);
+		return tax;
 	}
 //■ーーーーーーーーーーーーーーーーーーーーーーーーーーー	
 	public Integer getId() {

@@ -25,6 +25,11 @@ public class OrderItem {
 	/** 一緒に注文したトッピングのID */
 	private List<OrderTopping> orderToppingList;
 
+	/**
+	 * 注文した商品(らーめん)ごとの合計金額(subTotal)
+	 * 
+	 * @return 注文した商品ごとの合計金額
+	 */
 	public Integer getSubTotal() {
 		Integer orderItemPrice = 0;
 		Integer orderToppingPrice = 0;
