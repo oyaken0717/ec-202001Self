@@ -12,14 +12,14 @@ import com.example.domain.LoginUser;
 import com.example.domain.Order;
 import com.example.form.CartForm;
 import com.example.repository.OrderRepository;
-import com.example.service.OrderService;
+import com.example.service.CartService;
 
 @Controller
 @RequestMapping("/cart")
 public class CartContorller {
 	
 	@Autowired
-	private OrderService cartService;
+	private CartService cartService;
 
 	@Autowired
 	private HttpSession session;

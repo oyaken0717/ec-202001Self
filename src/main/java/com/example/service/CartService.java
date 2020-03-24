@@ -22,7 +22,7 @@ import com.example.repository.OrderToppingRepositry;
  */
 @Service
 @Transactional
-public class CartService2 {
+public class CartService {
 
 	@Autowired
 	private OrderRepository orderRepository;
