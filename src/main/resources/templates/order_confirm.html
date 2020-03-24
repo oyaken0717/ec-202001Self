@@ -75,79 +75,32 @@
 								</div>
 							</th>
 						</tr>
-						<tr>
+						
+						<tr th:each="orderItem:${orderItemList}">
 							<td>
 								<div class="center">
-									<img src="../static/img_pizza/1.jpg"
-										class="img-responsive img-rounded" width="100" height="300"><br>
-									じゃがバターベーコン
+									<img th:src="@{'/img_noodle/'+${orderItem.item.imagePath}}" class="img-responsive img-rounded" width="100" height="300"><br>
+									<span th:text="${orderItem.item.name}">じゃがバターベーコン</span>
 								</div>
 							</td>
 							<td>
-								<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-								&nbsp;&nbsp;1個
+								<span th:text="${orderItem.size}" class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;
+								<span th:if="${orderItem.size} == 'M'" th:text="${orderItem.item.priceM}">2,380円</span>
+								<span th:if="${orderItem.size} == 'L'" th:text="${orderItem.item.priceL}">2,380円</span>
+								&nbsp;&nbsp;
+								<span th:text="${orderItem.quantity}"></span>個
 							</td>
 							<td>
 								<ul>
-									<li>ピーマン300円</li>
-									<li>オニオン300円</li>
-									<li>あらびきソーセージ300円</li>
+									<li th:each="orderTopping:${orderItem.orderToppingList}">
+										<span th:text="${orderTopping.topping.name}">ピーマン</span>
+										<span th:if="${orderItem.size} == 'M'" th:text="${orderTopping.topping.priceM}">300円</span>
+										<span th:if="${orderItem.size} == 'L'" th:text="${orderTopping.topping.priceL}">300円</span>
+									</li>
 								</ul>
 							</td>
 							<td>
-								<div class="text-center">
-									3,280円
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="center">
-									<img src="../static/img_pizza/1.jpg"
-										class="img-responsive img-rounded" width="100" height="300"><br>
-									じゃがバターベーコン
-								</div>
-							</td>
-							<td>
-								<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-								&nbsp;&nbsp;1個
-							</td>
-							<td>
-								<ul>
-									<li>ピーマン300円</li>
-									<li>オニオン300円</li>
-									<li>あらびきソーセージ300円</li>
-								</ul>
-							</td>
-							<td>
-								<div class="text-center">
-									3,280円
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="center">
-									<img src="../static/img_pizza/1.jpg"
-										class="img-responsive img-rounded" width="100" height="300"><br>
-									じゃがバターベーコン
-								</div>
-							</td>
-							<td>
-								<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-								&nbsp;&nbsp;1個
-							</td>
-							<td>
-								<ul>
-									<li>ピーマン300円</li>
-									<li>オニオン300円</li>
-									<li>あらびきソーセージ300円</li>
-								</ul>
-							</td>
-							<td>
-								<div class="text-center">
-									3,280円
-								</div>
+								<div th:text="${orderItem.getSubTotal() + '円'}"class="text-center">3,280</div>
 							</td>
 						</tr>
 					</tbody>
@@ -158,13 +111,13 @@
 		<div class="row">
 			<div class="col-xs-offset-2 col-xs-8">
 				<div class="form-group text-center">
-					<span id="total-price">消費税：8,000円</span><br>
-					<span id="total-price">ご注文金額合計：38,000円 (税込)</span>
+					消費税：<span th:text="${order.getTax()}" id="total-price">8,000</span>円<br>
+					ご注文金額合計：<span th:text="${order.getCalcTotalPrice()}" id="total-price">38,000</span>円 (税込)
 				</div>
 			</div>
 		</div>
 
-		<!-- table -->
+<!--■お届け先情報 table -->
 		<form action="order_finished.html">
 			<div class="row">
 				<div
