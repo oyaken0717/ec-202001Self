@@ -27,6 +27,13 @@ public class OrderController {
 	@Autowired
 	private CartService cartService;
 	
+	/**
+	 * 注文確認画面にいく.
+	 * 
+	 * @param loginUser ログインユーザー情報
+	 * @param model モデル
+	 * @return 注文確認画面へ
+	 */
 	@RequestMapping("/to-order-confirm")
 	public String toOrderConfirm(@AuthenticationPrincipal LoginUser loginUser, Model model) {
 		Integer userId = session.getId().hashCode();
@@ -38,5 +45,25 @@ public class OrderController {
 		model.addAttribute("orderItemList", order.getOrderItemList());
 		model.addAttribute("order", order);
 		return "order_confirm";
+	}
+	
+	/**
+	 * 注文をする.
+	 * 
+	 * @return toOrderFinish()メソッドへ
+	 */
+	@RequestMapping("/decide")
+	public String decide() {
+		return "redirect:/order/to-order-finish";
+	}
+	
+	/**
+	 * 注文完了画面へ
+	 * 
+	 * @return 注文完了画面
+	 */
+	@RequestMapping("/to-order-finish")
+	public String toOrderFinish() {
+		return "order_finished";
 	}
 }
