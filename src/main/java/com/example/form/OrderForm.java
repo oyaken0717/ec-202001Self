@@ -1,7 +1,5 @@
 package com.example.form;
 
-import java.sql.Timestamp;
-
 public class OrderForm {
 
 	/** 宛先氏名 */

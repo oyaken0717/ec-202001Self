@@ -86,7 +86,7 @@ public class CartService {
 		}
 	}
 
-	public Order showCartList(Integer userId, Integer status) {
+	public Order findByUserIdAndStatus(Integer userId, Integer status) {
 		Order order = orderRepository.findByUserIdAndStatus(userId, status);
 		return order;
 	}

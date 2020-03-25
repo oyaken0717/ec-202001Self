@@ -1,7 +1,14 @@
 package com.example.controller;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -12,6 +19,7 @@ import com.example.domain.LoginUser;
 import com.example.domain.Order;
 import com.example.form.OrderForm;
 import com.example.service.CartService;
+import com.example.service.OrderService;
 
 /**
  * カートに入れた注文情報どうのこうのする.
@@ -25,9 +33,12 @@ public class OrderController {
 
 	@Autowired
 	private HttpSession session;
+	
 	@Autowired
 	private CartService cartService;
 	
+	@Autowired
+	private OrderService orderService;
 	/**
 	 * 注文確認画面にいく.
 	 * 
@@ -42,7 +53,7 @@ public class OrderController {
 			userId = loginUser.getUser().getId();
 		}
 		//■引数の「0」はstatus		
-		Order order = cartService.showCartList(userId, 0);
+		Order order = cartService.findByUserIdAndStatus(userId, 0);
 		model.addAttribute("orderItemList", order.getOrderItemList());
 		model.addAttribute("order", order);
 		return "order_confirm";
@@ -54,8 +65,33 @@ public class OrderController {
 	 * @return toOrderFinish()メソッドへ
 	 */
 	@RequestMapping("/decide")
-	public String decide(OrderForm form) {
-		System.out.println(form.toString());
+	public String decide(OrderForm form, @AuthenticationPrincipal LoginUser loginUser) {
+		System.out.println("form.getDeliveryDate()");
+		System.out.println(form.getDeliveryDate());
+		
+		System.out.println("form.getDeliveryTime()");
+		System.out.println(form.getDeliveryTime());
+
+		Integer userId = loginUser.getUser().getId();
+		//■「0」はstatus
+		Order order= cartService.findByUserIdAndStatus(userId, 0);
+		//■配達時間 =　日時 + 時間 > deliveryTime > sql内はTimestamp型 > 1970-01-01 00:00:01の形にしないといけない。	
+		Timestamp time = orderService.stringToTimestamp(form);
+		
+		System.out.println("Timestamp time");
+		System.out.println(time);
+		
+		BeanUtils.copyProperties(form, order);
+		
+		order.setTotalPrice(order.getCalcTotalPrice());
+		order.setOrderDate(new Date());
+		order.setDeliveryTime(time);
+		
+		System.out.println("order.getDeliveryTime()");
+		System.out.println(order.getDeliveryTime());
+		
+		order.setStatus(form.getPaymentMethod());
+		orderService.save(order);
 		return "redirect:/order/to-order-finish";
 	}
 	

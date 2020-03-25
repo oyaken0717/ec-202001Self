@@ -51,7 +51,7 @@ public class CartContorller {
 		if (loginUser != null) {
 			userId = loginUser.getUser().getId();
 		}
-		Order order = cartService.showCartList(userId, 0);
+		Order order = cartService.findByUserIdAndStatus(userId, 0);
 		model.addAttribute("orderItemList", order.getOrderItemList());
 		model.addAttribute("order", order);
 		return "cart_list";

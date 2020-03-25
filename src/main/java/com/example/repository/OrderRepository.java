@@ -131,13 +131,17 @@ public class OrderRepository {
 	public Order save(Order order) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		if (order.getId() == null) {
-			// ■INSERT文の自動生成
-			// > 自動採番idがNumberオブジェクトとして返る。 > key変数で受け取る。
+			// ■INSERT文の自動生成 > 自動採番idがNumberオブジェクトとして返る。 > key変数で受け取る。
 			Number key = insert.executeAndReturnKey(param);
 			// ■int型に変換 > セット
 			order.setId(key.intValue());
 		} else {
-			// (省略)UPDATE処理に変更はありません
+			StringBuilder sql=new StringBuilder();
+			sql.append("UPDATE orders SET user_id=:userId,status=:status,total_price=:totalPrice,order_date=:orderDate,");
+			sql.append("destination_name=:destinationName,destination_email=:destinationEmail,destination_zipcode=:destinationZipcode,");
+			sql.append("destination_address=:destinationAddress,destination_tel=:destinationTel,delivery_time=:deliveryTime,");
+			sql.append("payment_method=:paymentMethod WHERE id=:id");
+			template.update(sql.toString(), param);
 		}
 		return order;
 	}
