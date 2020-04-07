@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			//■①-2本来は v の書き方でフィルターを無視できるパスを制限する。
 //			.antMatchers("/login-user/to-login","/register-user/toRegister").permitAll()
 			//■② /user/から始まるパスはUSER権限でログインしている場合のみアクセス可(権限設定時の「ROLE_」を除いた文字列を指定)
-			.antMatchers("/user/**").hasRole("USER")
+//			●.antMatchers("/user/**").hasRole("USER")
 			//■それ以外のパスは認証が必要
 			.anyRequest().authenticated(); 
 

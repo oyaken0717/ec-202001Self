@@ -44,7 +44,7 @@ public class OrderRepository {
 		List<Topping> toppingList = new ArrayList<>();
 
 		int beforeOrderId = 0;
-		int firstOrderItemId = 0;
+		int beforeOrderItemId = 0;
 
 		while (rs.next()) {
 			int nowOrderId = rs.getInt("order_id");// ■o.id 注文ID
@@ -66,7 +66,7 @@ public class OrderRepository {
 				order.setOrderItemList(orderItemList);
 				orderList.add(order);
 			}
-			if (rs.getInt("orderitem_id") != firstOrderItemId && rs.getInt("orderitem_id") != beforeOrderId) {
+			if (rs.getInt("orderitem_id") != beforeOrderItemId && rs.getInt("orderitem_id") != beforeOrderId) {
 				OrderItem orderItem = new OrderItem();
 				Item item = new Item();
 				toppingList = new ArrayList<>();
@@ -105,7 +105,7 @@ public class OrderRepository {
 				topping.setPriceM(rs.getInt("topping_price_m"));
 				topping.setPriceL(rs.getInt("topping_price_l"));
 			}
-			firstOrderItemId = rs.getInt("orderitem_id");
+			beforeOrderItemId = rs.getInt("orderitem_id");
 			beforeOrderId = rs.getInt("order_id");
 		}
 		return orderList;
@@ -123,7 +123,8 @@ public class OrderRepository {
 	}
 
 	/**
-	 * 注文情報をカートに入れる.
+	 * insert:注文情報をカートに入れる.<br>
+	 * update:カートに入れた商品を注文する
 	 * 
 	 * @param order
 	 * @return
@@ -179,6 +180,50 @@ public class OrderRepository {
 			return orderList.get(0);
 		}
 		return null;
+	}
+	
+	/**
+	 * ユーザーIDから注文履歴(statusが1か2)を取得する.
+	 * 
+	 * @param userId　ログインユーザーのID
+	 * @return 購入したラーメンの情報が入ったリスト
+	 */
+	public List<Order> findByUserId(Integer userId) {
+		StringBuilder sql = new StringBuilder();
+//■ Order
+		sql.append("SELECT ");
+		sql.append(" o.id order_id, o.user_id order_user_id, o.status order_status, o.total_price order_total_price, o.order_date order_date, ");
+		sql.append(" o.destination_name order_destination_name, o.destination_email order_destination_email, o.destination_zipcode order_destination_zipcode, ");
+		sql.append(" o.destination_address order_destination_address, o.destination_tel order_destination_tel, o.delivery_time order_delivery_time, ");
+		sql.append(" o.payment_method order_payment_method, ");
+//■ OrderItem
+		sql.append(" oi.id orderitem_id, oi.item_id orderitem_item_id, oi.order_id orderitem_order_id, ");
+		sql.append(" oi.quantity orderitem_quantity, oi.size orderitem_size, ");
+//■ Item
+		sql.append(" i.id item_id, i.name item_name, i.description item_description, i.price_m item_price_m, ");
+		sql.append(" i.price_l item_price_l, i.image_path item_image_path, i.deleted item_deleted, ");
+//■ OrderTopping
+		sql.append(" ot.id order_topping_id, ot.topping_id topping_id, ot.order_item_id order_item_id, ");
+//■ Topping
+		sql.append(" t.id topping_id, t.name topping_name, t.price_m topping_price_m, t.price_l topping_price_l ");
+//■ 結合
+		sql.append("FROM ");
+		sql.append(" orders o ");
+		sql.append(" LEFT OUTER JOIN order_items oi    ON o.id = oi.order_id ");
+		sql.append(" INNER JOIN            items i     ON oi.item_id = i.id ");
+		sql.append(" LEFT OUTER JOIN order_toppings ot ON oi.id = ot.order_item_id ");
+		sql.append(" INNER JOIN            toppings t  ON ot.topping_id = t.id ");
+//■ WHERE
+		sql.append("WHERE ");
+		sql.append(" o.user_id = :user_id ");
+		sql.append("AND ");
+		sql.append(" o.status IN (1,2) ");
+		sql.append("ORDER BY ");
+		sql.append(" o.id DESC ");
+
+		SqlParameterSource parame = new MapSqlParameterSource().addValue("user_id", userId);
+		List<Order> orderList = template.query(sql.toString(), parame, ORDER_RESULT_SET_EXTRACTOR);
+		return orderList;
 	}
 
 	public void deleteById(Integer id) {

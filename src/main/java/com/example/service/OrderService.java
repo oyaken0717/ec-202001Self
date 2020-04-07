@@ -3,6 +3,7 @@ package com.example.service;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,23 @@ public class OrderService {
 		return null;
 	}
 	
+	/**
+	 * 注文情報を記録する.
+	 * 
+	 * @param order 注文情報が入ったオブジェクト
+	 */
 	public void save(Order order) {
 		orderRepository.save(order);
+	}
+	
+	/**
+	 * 注文履歴の情報を取得する.
+	 * 
+	 * @param userId ログインユーザーのID
+	 * @return 注文が確定したOrderのオブジェクト
+	 */
+	public List<Order> findByUserId(Integer userId) {
+		List<Order> orderList = orderRepository.findByUserId(userId);
+		return orderList ;
 	}
 }

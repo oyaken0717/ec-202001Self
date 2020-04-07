@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -39,6 +40,7 @@ public class OrderController {
 	
 	@Autowired
 	private OrderService orderService;
+	
 	/**
 	 * 注文確認画面にいく.
 	 * 
@@ -96,12 +98,28 @@ public class OrderController {
 	}
 	
 	/**
-	 * 注文完了画面へ
+	 * 注文完了画面へ.
 	 * 
 	 * @return 注文完了画面
 	 */
 	@RequestMapping("/to-order-finish")
 	public String toOrderFinish() {
 		return "order_finished";
+	}
+	
+	/**
+	 * 注文履歴画面へ.
+	 * 
+	 * @param loginUser ログインユーザー
+	 * @param model 注文が確定した情報の入ったリスト
+	 * @return 注文履歴画面
+	 */
+	@RequestMapping("/to-order-history")
+	public String toOrderHistory(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+		Integer userId = loginUser.getUser().getId();
+		List<Order> orderList = orderService.findByUserId(userId);
+		System.out.println(orderList);
+		model.addAttribute("orderList",orderList);
+		return "order_history";
 	}
 }

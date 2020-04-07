@@ -59,12 +59,21 @@ public class CartService {
 			// ■Order(カート)に注文トッピングを挿入
 			if (form.getOrderToppingList() != null) {
 				// ■コンソール：orderToppingList=[1, 2] > トッピングのIDがListで入ってる。
-				for (Integer orderToppingId : form.getOrderToppingList()) {
+//				for (Integer orderToppingId : form.getOrderToppingList()) {
+//					OrderTopping orderTopping = new OrderTopping();
+//					orderTopping.setToppingId(orderToppingId);
+//					orderTopping.setOrderItemId(orderItem.getId());
+//					orderToppingRepositry.insert(orderTopping);
+//				}
+				
+				//■ラムダ式内でラムダ式外にある変数を書き換えることはできません。の為
+				Integer orderItemId = orderItem.getId();
+				form.getOrderToppingList().forEach(orderToppingId -> {
 					OrderTopping orderTopping = new OrderTopping();
 					orderTopping.setToppingId(orderToppingId);
-					orderTopping.setOrderItemId(orderItem.getId());
+					orderTopping.setOrderItemId(orderItemId);
 					orderToppingRepositry.insert(orderTopping);
-				}
+				});
 			}
 		} else if (preOrder.getStatus() == 0) {
 			// ■Order(カート)に注文商品を挿入
@@ -76,12 +85,21 @@ public class CartService {
 			// ■Order(カート)に注文トッピングを挿入
 			if (form.getOrderToppingList() != null) {
 				// ■コンソール：orderToppingList=[1, 2] > トッピングのIDがListで入ってる。
-				for (Integer orderToppingId : form.getOrderToppingList()) {
-					OrderTopping orderTopping = new OrderTopping();
-					orderTopping.setToppingId(orderToppingId);
-					orderTopping.setOrderItemId(orderItem.getId());
-					orderToppingRepositry.insert(orderTopping);
-				}
+//				for (Integer orderToppingId : form.getOrderToppingList()) {
+//					OrderTopping orderTopping = new OrderTopping();
+//					orderTopping.setToppingId(orderToppingId);
+//					orderTopping.setOrderItemId(orderItem.getId());
+//					orderToppingRepositry.insert(orderTopping);
+//				}
+				
+				Integer orderItemId = orderItem.getId();
+				form.getOrderToppingList().stream()
+					.forEach(orderToppingId -> {
+						OrderTopping orderTopping = new OrderTopping();
+						orderTopping.setToppingId(orderToppingId);
+						orderTopping.setOrderItemId(orderItemId);
+						orderToppingRepositry.insert(orderTopping);
+				}); // 終端操作
 			}
 		}
 	}
