@@ -33,6 +33,7 @@ public class LoginUserRepository {
 		user.setZipcode(rs.getString("zipcode"));
 		user.setAddress(rs.getString("address"));
 		user.setTelephone(rs.getString("telephone"));
+		user.setAdmin(rs.getBoolean("admin"));
 		return user;
 	};
 		
@@ -43,7 +44,7 @@ public class LoginUserRepository {
 	 * @return 登録されたユーザー情報 or null(見つからなかった場合)
 	 */
 	public User findByEmail(String email) {
-		String sql = "select id, name, email, password, zipcode, address, telephone from users where email=:email";
+		String sql = "select id, name, email, password, zipcode, address, telephone, admin from users where email=:email";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
 		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);
 		if (userList.size() == 0) {

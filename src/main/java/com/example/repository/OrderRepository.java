@@ -143,6 +143,17 @@ public class OrderRepository {
 //			Number key = insert.executeAndReturnKey(param);			
 			// ■int型に変換 > セット
 //			order.setId(key.intValue());
+			
+// ================================================================================================			
+//          飛田さん
+//			insert をする前に　シーケンスから新しい番号だけをとってくる処理
+//			select nextval('xxxxx');
+//			を呼び出して、それとJavaのプログラムで求めた日付文字列とをつなげて
+//			注文番号を生成するイメージかな、と
+//			insert　前に１手必要になってしまいますが、その代わり注文番号は先に分かっているので
+//			orderItem に注文番号使う際もそれを使えばいいだけになります
+// ================================================================================================			
+			
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 			
 			Integer userId = order.getUserId();
@@ -184,6 +195,8 @@ public class OrderRepository {
 //■商品
 		sql.append("SELECT i.id item_id,i.name item_name,i.description item_description,i.price_m item_price_m,");
 		sql.append("i.price_l item_price_l,i.image_path item_image_path,i.deleted item_deleted,");
+//■ user
+		sql.append(" u.name user_name, ");
 //■注文(長い)
 		sql.append("o.id order_id,o.user_id order_user_id,o.status order_status,o.total_price order_total_price,");
 		sql.append(
@@ -202,6 +215,7 @@ public class OrderRepository {
 		sql.append("FROM orders o JOIN order_items oi ON o.id = oi.order_id ");
 // ②LEFT OUTER JOIN > 基本LEFT OUTER JOINでOK > 左側に右側をくっつける > 右なくてもエラーにならない。 
 		sql.append("LEFT OUTER JOIN order_toppings ot ON oi.id = ot.order_item_id ");
+		sql.append(" INNER JOIN            users u     ON o.user_id = u.id ");
 		sql.append("INNER JOIN items i ON oi.item_id = i.id LEFT OUTER JOIN toppings t ON ot.topping_id = t.id ");
 //■WHERE
 //		sql.append("WHERE o.user_id = :user_id AND o.status = :status ORDER BY oi.id");
@@ -230,6 +244,8 @@ public class OrderRepository {
 		sql.append(" o.destination_name order_destination_name, o.destination_email order_destination_email, o.destination_zipcode order_destination_zipcode, ");
 		sql.append(" o.destination_address order_destination_address, o.destination_tel order_destination_tel, o.delivery_time order_delivery_time, ");
 		sql.append(" o.payment_method order_payment_method, ");
+//■ user
+		sql.append(" u.name user_name, ");
 //■ OrderItem
 		sql.append(" oi.id orderitem_id, oi.item_id orderitem_item_id, oi.order_id orderitem_order_id, ");
 		sql.append(" oi.quantity orderitem_quantity, oi.size orderitem_size, ");
@@ -243,6 +259,7 @@ public class OrderRepository {
 //■ 結合
 		sql.append("FROM ");
 		sql.append(" orders o ");
+		sql.append(" INNER JOIN            users u     ON o.user_id = u.id ");
 		sql.append(" LEFT OUTER JOIN order_items oi    ON o.id = oi.order_id ");
 		sql.append(" INNER JOIN            items i     ON oi.item_id = i.id ");
 		sql.append(" LEFT OUTER JOIN order_toppings ot ON oi.id = ot.order_item_id ");

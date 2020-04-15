@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+.flex-list{
+	display: flex;
+	flex-wrap:wrap;
+}
+
+.flex-list th{
+	width:33%;
+}

@@ -17,6 +17,12 @@ public class AdminContorller {
 	@Autowired
 	private AdminService adminService;
 	
+	/**
+	 * 全ユーザーの注文一覧画面
+	 * 
+	 * @param model　全ユーザーの注文(Orderのstatusが1or2)情報が入ったList
+	 * @return 注文一覧画面
+	 */
 	@RequestMapping("/to-order-list")
 	public String toOrderList(Model model) {
 		List<Order> orderList = adminService.findAll();
