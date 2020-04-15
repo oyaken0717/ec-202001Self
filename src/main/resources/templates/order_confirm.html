@@ -46,7 +46,7 @@
 		</nav>
 
 
-		<!-- table -->
+<!--■ table -->
 		<div class="row">
 			<div
 				class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
@@ -266,9 +266,7 @@
 									<div class="row">
 										<div class="col-sm-12">
 											<label class="radio-inline">
-												<input type="radio"
-													name="paymentMethod" th:value="1" checked="checked">
-												代金引換
+												<input type="radio" name="paymentMethod" th:value="1" checked="checked">代金引換
 											</label>
 										</div>
 									</div>
@@ -284,10 +282,56 @@
 									<div class="row">
 										<div class="col-sm-12">
 											<label class="radio-inline">
-												<input type="radio"
-													name="paymentMethod" th:value="2">
-												クレジットカード
+												<input type="radio" name="paymentMethod" th:value="2">クレジットカード
 											</label><br><br>
+											
+												<div th:if="${message}" th:text="${message}" style="color:red"></div>
+												カード番号:
+												<input type="text" name="card_number"><br>
+ 												カード有効期限(月):
+												<select name = "card_exp_month" size="1">
+        											<option >01</option>
+        											<option >02</option>
+        											<option >03</option>
+        											<option >04</option>
+        											<option >05</option>
+        											<option >06</option>
+        											<option >07</option>
+        											<option >08</option>
+        											<option >09</option>
+        											<option >10</option>
+        											<option >11</option>
+        											<option >12</option>
+												</select><br>
+												カード有効期限(年):
+												<select name = "card_exp_year" size="1">
+        											<option>2018</option>
+        											<option>2019</option>
+        											<option>2020</option>
+        											<option>2021</option>
+        											<option>2022</option>
+        											<option>2023</option>
+        											<option>2024</option>
+        											<option>2025</option>
+        											<option>2026</option>
+        											<option>2027</option>
+        											<option>2028</option>
+        											<option>2029</option>
+        											<option>2030</option>
+        											<option>2031</option>
+        											<option>2032</option>
+        											<option>2033</option>
+        											<option>2034</option>
+        											<option>2035</option>
+        											<option>2036</option>
+        											<option>2037</option>
+        											<option>2038</option>
+												</select><br>
+ 												<hr>
+												カード名義人:<input type="text" name="card_name"><br>
+												セキュリティコード:<input type="text" name="card_cvv"><br>
+												<hr>
+											
 										</div>
 									</div>
 								</td>

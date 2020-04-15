@@ -15,7 +15,7 @@ public class OrderItem {
 	/** 商品のID */
 	private Integer itemId;
 	/** Orderドメイン(カート)のID */
-	private Integer orderId;
+	private Long orderId;
 	/** 数量 */
 	private Integer quantity;
 	/** サイズ */
@@ -64,11 +64,11 @@ public class OrderItem {
 		this.itemId = itemId;
 	}
 
-	public Integer getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(Integer orderId) {
+	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
 
@@ -107,6 +107,6 @@ public class OrderItem {
 	@Override
 	public String toString() {
 		return "OrderItem [id=" + id + ", itemId=" + itemId + ", orderId=" + orderId + ", quantity=" + quantity
-				+ ", size=" + size + ", item=" + item + "]";
+				+ ", size=" + size + ", item=" + item + ", orderToppingList=" + orderToppingList + "]";
 	}
 }

@@ -3,7 +3,7 @@ package com.example.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.Item;
@@ -20,6 +19,7 @@ import com.example.domain.Order;
 import com.example.domain.OrderItem;
 import com.example.domain.OrderTopping;
 import com.example.domain.Topping;
+import com.example.domain.User;
 
 /**
  * Order(カート)の情報を取得するレポジトリ.
@@ -32,9 +32,12 @@ public class OrderRepository {
 
 	@Autowired
 	private NamedParameterJdbcTemplate template;
+	
+	@Autowired
+	private DataSource dataSource;
 
 	// ■自動生成されたIDを取得できるようになる。
-	private SimpleJdbcInsert insert;
+//	private SimpleJdbcInsert insert;
 
 	private static final ResultSetExtractor<List<Order>> ORDER_RESULT_SET_EXTRACTOR = (rs) -> {
 		Order order = new Order();
@@ -43,15 +46,15 @@ public class OrderRepository {
 		List<OrderTopping> orderToppingList = new ArrayList<>();
 		List<Topping> toppingList = new ArrayList<>();
 
-		int beforeOrderId = 0;
+		long beforeOrderId = 0;
 		int beforeOrderItemId = 0;
 
 		while (rs.next()) {
-			int nowOrderId = rs.getInt("order_id");// ■o.id 注文ID
+			Long nowOrderId = rs.getLong("order_id");// ■o.id 注文ID
 			if (nowOrderId != beforeOrderId) {
 				order = new Order();
 				orderItemList = new ArrayList<>();
-				order.setId(rs.getInt("order_id"));
+				order.setId(rs.getLong("order_id"));
 				order.setUserId(rs.getInt("order_user_id"));
 				order.setStatus(rs.getInt("order_status"));
 				order.setTotalPrice(rs.getInt("order_total_price"));
@@ -64,6 +67,10 @@ public class OrderRepository {
 				order.setDeliveryTime(rs.getTimestamp("order_delivery_time"));
 				order.setPaymentMethod(rs.getInt("order_payment_method"));
 				order.setOrderItemList(orderItemList);
+				//■ User情報を追加
+				User user = new User();
+				user.setName(rs.getString("user_name"));
+				order.setUser(user);
 				orderList.add(order);
 			}
 			if (rs.getInt("orderitem_id") != beforeOrderItemId && rs.getInt("orderitem_id") != beforeOrderId) {
@@ -75,7 +82,7 @@ public class OrderRepository {
 				orderItemList.add(orderItem);
 				orderItem.setId(rs.getInt("orderitem_id"));
 				orderItem.setItemId(rs.getInt("orderitem_item_id"));
-				orderItem.setOrderId(rs.getInt("orderitem_order_id"));
+				orderItem.setOrderId(rs.getLong("orderitem_order_id"));
 				orderItem.setQuantity(rs.getInt("orderitem_quantity"));
 				orderItem.setSize(rs.getString("orderitem_size").toCharArray()[0]);
 				orderItem.setItem(item);
@@ -106,7 +113,7 @@ public class OrderRepository {
 				topping.setPriceL(rs.getInt("topping_price_l"));
 			}
 			beforeOrderItemId = rs.getInt("orderitem_id");
-			beforeOrderId = rs.getInt("order_id");
+			beforeOrderId = rs.getLong("order_id");
 		}
 		return orderList;
 	};
@@ -114,13 +121,13 @@ public class OrderRepository {
 	// ■init()
 	// OrderRepositoryがインスタンス化 > 1度だけ実行される。
 	// > idカラムが自動採番される。 > Springに教える。
-	@PostConstruct
-	public void init() {
-		// ■JdbcTemplateで挿入をしている。(@Autowired > メソッド内で呼ばれる。 > SQLの発行)
-		insert = new SimpleJdbcInsert((JdbcTemplate) template.getJdbcTemplate());
-		// ■①テーブル名を設定する。 > ②自動採番されるカラム名を設定する。
-		insert = insert.withTableName("orders").usingGeneratedKeyColumns("id");
-	}
+//	@PostConstruct
+//	public void init() {
+//		// ■JdbcTemplateで挿入をしている。(@Autowired > メソッド内で呼ばれる。 > SQLの発行)
+//		insert = new SimpleJdbcInsert((JdbcTemplate) template.getJdbcTemplate());
+//		// ■①テーブル名を設定する。 > ②自動採番されるカラム名を設定する。
+//		insert = insert.withTableName("orders").usingGeneratedKeyColumns("id");
+//	}
 
 	/**
 	 * insert:注文情報をカートに入れる.<br>
@@ -133,9 +140,21 @@ public class OrderRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		if (order.getId() == null) {
 			// ■INSERT文の自動生成 > 自動採番idがNumberオブジェクトとして返る。 > key変数で受け取る。
-			Number key = insert.executeAndReturnKey(param);
+//			Number key = insert.executeAndReturnKey(param);			
 			// ■int型に変換 > セット
-			order.setId(key.intValue());
+//			order.setId(key.intValue());
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			
+			Integer userId = order.getUserId();
+			Integer status = order.getStatus();
+			Integer totalPrice = order.getTotalPrice();
+			
+			String sql = "INSERT INTO orders (id, user_id, status, total_price) "
+					+ "VALUES (cast(to_char(CURRENT_TIMESTAMP, 'yyyymmdd')||to_char(nextval('ORDER_CODE_SEQ'),'FM000000') AS bigint), "
+					+ " ?, ?, ?) RETURNING id";
+			
+			long id = jdbcTemplate.queryForObject(sql, long.class,userId, status, totalPrice);
+			order.setId(id);
 		} else {
 			StringBuilder sql=new StringBuilder();
 			sql.append("UPDATE orders SET user_id=:userId,status=:status,total_price=:totalPrice,order_date=:orderDate,");
@@ -146,8 +165,21 @@ public class OrderRepository {
 		}
 		return order;
 	}
+	
+	public void update(Order order) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
+		StringBuilder sql=new StringBuilder();
+		sql.append("UPDATE ");
+		sql.append(" orders ");
+		sql.append("SET ");
+		sql.append(" status = :status ");
+		sql.append("WHERE ");
+		sql.append(" id = :id ");
+		template.update(sql.toString(), param);
+	}
 
 	public Order findByUserIdAndStatus(Integer userId, Integer status) {
+		
 		StringBuilder sql = new StringBuilder();
 //■商品
 		sql.append("SELECT i.id item_id,i.name item_name,i.description item_description,i.price_m item_price_m,");
@@ -172,9 +204,11 @@ public class OrderRepository {
 		sql.append("LEFT OUTER JOIN order_toppings ot ON oi.id = ot.order_item_id ");
 		sql.append("INNER JOIN items i ON oi.item_id = i.id LEFT OUTER JOIN toppings t ON ot.topping_id = t.id ");
 //■WHERE
-		sql.append("WHERE o.user_id = :user_id AND o.status = :status ORDER BY oi.id");
+//		sql.append("WHERE o.user_id = :user_id AND o.status = :status ORDER BY oi.id");
+		sql.append("WHERE o.user_id = :user_id AND o.status IN (:status, 9) ORDER BY oi.id");
 
 		SqlParameterSource param = new MapSqlParameterSource().addValue("user_id", userId).addValue("status", status);
+		
 		List<Order> orderList = template.query(sql.toString(), param, ORDER_RESULT_SET_EXTRACTOR);
 		if (orderList.size() > 0) {
 			return orderList.get(0);
@@ -223,6 +257,52 @@ public class OrderRepository {
 
 		SqlParameterSource parame = new MapSqlParameterSource().addValue("user_id", userId);
 		List<Order> orderList = template.query(sql.toString(), parame, ORDER_RESULT_SET_EXTRACTOR);
+		return orderList;
+	}
+
+	/**
+	 * 利用者全ての購買履歴を取得する.
+	 * 
+	 * @return 利用者全ての購買履歴情報(Orderのstatusが1or2)
+	 */
+	public List<Order> findAll() {
+		StringBuilder sql = new StringBuilder();
+//■ Order
+		sql.append("SELECT ");
+		sql.append(" o.id order_id, o.user_id order_user_id, o.status order_status, o.total_price order_total_price, o.order_date order_date, ");
+		sql.append(" o.destination_name order_destination_name, o.destination_email order_destination_email, o.destination_zipcode order_destination_zipcode, ");
+		sql.append(" o.destination_address order_destination_address, o.destination_tel order_destination_tel, o.delivery_time order_delivery_time, ");
+		sql.append(" o.payment_method order_payment_method, ");
+//■ user
+		sql.append(" u.name user_name, ");
+//■ OrderItem
+		sql.append(" oi.id orderitem_id, oi.item_id orderitem_item_id, oi.order_id orderitem_order_id, ");
+		sql.append(" oi.quantity orderitem_quantity, oi.size orderitem_size, ");
+//■ Item
+		sql.append(" i.id item_id, i.name item_name, i.description item_description, i.price_m item_price_m, ");
+		sql.append(" i.price_l item_price_l, i.image_path item_image_path, i.deleted item_deleted, ");
+//■ OrderTopping
+		sql.append(" ot.id order_topping_id, ot.topping_id topping_id, ot.order_item_id order_item_id, ");
+//■ Topping
+		sql.append(" t.id topping_id, t.name topping_name, t.price_m topping_price_m, t.price_l topping_price_l ");
+//■ 結合
+		sql.append("FROM ");
+		sql.append(" orders o ");
+		sql.append(" INNER JOIN            users u     ON o.user_id = u.id ");
+		sql.append(" LEFT OUTER JOIN order_items oi    ON o.id = oi.order_id ");
+		sql.append(" INNER JOIN            items i     ON oi.item_id = i.id ");
+		sql.append(" LEFT OUTER JOIN order_toppings ot ON oi.id = ot.order_item_id ");
+		sql.append(" INNER JOIN            toppings t  ON ot.topping_id = t.id ");
+//■ WHERE
+		sql.append("WHERE ");
+		sql.append(" o.status IN (1,2) ");
+		sql.append("ORDER BY ");
+		sql.append(" o.id DESC ");
+		
+		List<Order> orderList = template.query(sql.toString(), ORDER_RESULT_SET_EXTRACTOR);
+		if (orderList.size() == 0) {
+			return null;
+		}
 		return orderList;
 	}
 

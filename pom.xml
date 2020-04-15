@@ -55,19 +55,23 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-<!-- ■SpringSecurityを入れる設定 -->
-<!-- > ログイン認証フィルターがONになる。-->
-<!-- > パスワードがハッシュ化されている前提になる。-->
+		<!-- ■SpringSecurityを入れる設定 -->
+		<!-- > ログイン認証フィルターがONになる。 -->
+		<!-- > パスワードがハッシュ化されている前提になる。 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-<!-- ■Thymeleafでログイン情報を取得する設定 -->
+		<!-- ■Thymeleafでログイン情報を取得する設定 -->
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
-
+		<!--■ メール -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

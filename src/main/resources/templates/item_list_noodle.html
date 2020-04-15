@@ -35,10 +35,10 @@
 				<div class="collapse navbar-collapse"
 					id="bs-example-navbar-collapse-1">
 					<p class="navbar-text navbar-right">
-						<a th:href="@{/cart/show-cart-list}" class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;
-						
+						<a th:href="@{/cart/show-cart-list}" class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;					
 						<span sec:authorize="hasRole('ROLE_USER')">
 							<a href="/order/to-order-history" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
+							<a href="/admin/to-order-list" class="navbar-link">注文一覧</a>&nbsp;&nbsp;
 							<a href="/logout">ログアウト</a>
 						</span>
 						<span sec:authorize="!hasRole('ROLE_USER')"><a href="/login-user/to-login">ログイン</a></span>

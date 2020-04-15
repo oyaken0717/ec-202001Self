@@ -36,7 +36,7 @@ public class CartService {
 	/**
 	 * カートの情報を作るメソッド.
 	 * 
-	 * @param form   商品詳細画面の「カートに入れる」ボタンを押して流れてきForm
+	 * @param form   商品詳細画面の「カートに入れる」ボタンを押して流れてきたForm
 	 * @param userId ログインユーザーのID or 仮のsessionからのID
 	 */
 	public void insert(CartForm form, Integer userId) {

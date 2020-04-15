@@ -49,4 +49,15 @@ public class OrderService {
 		List<Order> orderList = orderRepository.findByUserId(userId);
 		return orderList ;
 	}
+	
+	/**
+	 * 何らかの理由により「キャンセル」になった場合の処理.<br>
+	 * ①管理者の権限 ②メールアプリ側の問題 ③SQL側の問題
+	 * 
+	 * @param order カートに既に入っていて、これから注文を確定させようといていたOrder(注文)
+	 */
+	public void update(Order order) {
+		orderRepository.update(order);
+	}
+	
 }
