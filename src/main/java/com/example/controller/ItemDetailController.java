@@ -1,7 +1,12 @@
 package com.example.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +27,14 @@ import com.example.service.ToppingService;
  */
 @Controller
 @RequestMapping("/item-detail")
-public class ItemDetailController {
+public class ItemDetailController extends HttpServlet {
 
 	@Autowired
 	public ItemService itemService;
 	
 	@Autowired
 	public ToppingService toppingService;
-	
-	@Autowired
-	private HttpSession session;
-	
+		
 	/**
 	 * 商品詳細画面にいく.
 	 * 
@@ -41,7 +43,16 @@ public class ItemDetailController {
 	 * @return 商品詳細画面へ
 	 */
 	@RequestMapping("/show-detail")
-	public String showDetail(Integer id, Model model) {
+	public String showDetail(Integer id, Model model,HttpServletResponse response)  throws IOException, ServletException{
+		String itemNum = String.valueOf(id);
+		//■ クッキーを入れる。
+		Cookie cookie = new Cookie(itemNum, "1");
+		response.addCookie(cookie);
+		System.out.println("cookie2ーーーーーーーーーーーーーーーー");
+		System.out.println(cookie.getName());
+		System.out.println(cookie.getValue());
+		
+		//■ 商品詳細をloadする。
 		Item item = itemService.load(id);
 		List<Topping> toppingList = toppingService.findAll();
 		item.setToppingList(toppingList);

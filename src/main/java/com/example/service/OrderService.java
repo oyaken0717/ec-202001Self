@@ -45,8 +45,8 @@ public class OrderService {
 	 * @param userId ログインユーザーのID
 	 * @return 注文が確定したOrderのオブジェクト
 	 */
-	public List<Order> findByUserId(Integer userId) {
-		List<Order> orderList = orderRepository.findByUserId(userId);
+	public List<Order> findByUserId(Integer userId, boolean isJoin) {
+		List<Order> orderList = orderRepository.findByUserId(userId, isJoin);
 		return orderList ;
 	}
 	

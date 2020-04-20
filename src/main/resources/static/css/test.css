@@ -8,3 +8,12 @@
 .flex-list th{
 	width:33%;
 }
+
+.flex-list-admin-option{
+	display: flex;
+	flex-wrap:wrap;
+}
+
+.flex-list-admin-option th{
+	width:33%;
+}

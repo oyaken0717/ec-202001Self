@@ -178,7 +178,8 @@ public class OrderController {
 	@RequestMapping("/to-order-history")
 	public String toOrderHistory(@AuthenticationPrincipal LoginUser loginUser, Model model) {
 		Integer userId = loginUser.getUser().getId();
-		List<Order> orderList = orderService.findByUserId(userId);
+		boolean isJoin = true;
+		List<Order> orderList = orderService.findByUserId(userId, isJoin);
 		System.out.println(orderList);
 		model.addAttribute("orderList", orderList);
 		return "order_history";

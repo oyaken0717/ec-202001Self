@@ -38,10 +38,10 @@
 						<a th:href="@{/cart/show-cart-list}" class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;					
 						<span sec:authorize="hasRole('ROLE_USER')">
 							<a href="/order/to-order-history" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
- 						<span sec:authorize="hasRole('ROLE_ADMIN')">
-							<a href="/admin/to-admin-option" class="navbar-link">管理者画面</a>&nbsp;&nbsp;
-						</span>
 							<a href="/logout">ログアウト</a>
+						</span>
+						<span sec:authorize="hasRole('ROLE_ADMIN')">
+							<a href="/admin/to-order-list" class="navbar-link">注文一覧</a>&nbsp;&nbsp;
 						</span>
 						<span sec:authorize="!hasRole('ROLE_USER')"><a href="/login-user/to-login">ログイン</a></span>
 					</p>
@@ -57,7 +57,7 @@
 				class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<div class="panel-title">商品を検索する</div>
+						<div class="panel-title">管理者機能一覧</div>
 					</div>
 					<div class="panel-body">
 						<form method="post" action="#" class="form-horizontal">
@@ -83,17 +83,18 @@
 			<div class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
 				<table class="table table-striped">
 					<tbody>
-						<tr class="flex-list">
-							<th th:each="item:${itemList}">
-									<a th:href="@{'/item-detail/show-detail?id=' + ${item.id}}" >
-										<img th:src="@{'/img_noodle/' + ${item.imagePath}}" class="img-responsive img-rounded" width="200" height="600">
-									</a><br>
-									<a th:href="@{'/item-detail/show-detail?id=' + ${item.id}}" th:text="${item.name}">じゃがバターベーコン</a>
-									<span th:if="${item.cookie == 1}" th:text="見た"></span><br>
-									<span class="price">&nbsp;М&nbsp;</span>
-									<span th:text="${item.priceM}" class="price"></span>&nbsp;円(税抜)<br>
-									<span class="price">&nbsp;Ｌ</span>
-									<span th:text="${item.priceL}" class="price"></span>&nbsp;円(税抜)<br>
+						<tr class="flex-list-admin-option">
+<!--■ 注文一覧 -->
+							<th>
+								<img src="/img_noodle/1.jpg" class="img-responsive img-rounded" width="200" height="600">
+								<br>
+								<a href="/admin/to-order-list">注文一覧</a><br>
+							</th>
+<!--■ グラフ -->
+							<th>
+								<img src="/img_noodle/2.jpg" class="img-responsive img-rounded" width="200" height="600">
+								<br>
+								<a href="/admin/graph">グラフ</a><br>
 							</th>
 						</tr>
 					</tbody>

@@ -25,8 +25,6 @@ public class UDSImplement implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = loginUserRepository.findByEmail(email);
-System.out.println("user");
-System.out.println(user.toString());
 		Collection<GrantedAuthority> authorityList = new ArrayList<>();
 		authorityList.add(new SimpleGrantedAuthority("ROLE_USER")); // ユーザ権限付与
 		if(user.isAdmin()) {

@@ -98,6 +98,7 @@
  -->						</tr>
 <!--■中身 ------------------->
 						<tbody th:each="order:${orderList}">
+						<tr>
 						<tr th:each="orderItem:${order.orderItemList}">
 							<td>
 								<div class="center">
@@ -109,7 +110,7 @@
 									<span th:text="${order.orderDate}">年月日</span>
 								</div>
 							</td>
-							<td>
+ 							<td>
 								<div class="center">
 									<img th:src="@{'/img_noodle/'+${orderItem.item.imagePath}}" class="img-responsive img-rounded" width="100" height="300"><br>
 								</div>
@@ -130,18 +131,12 @@
 									<span th:if="${order.status} == 2" th:text="入金済">未入金</span>
 								</div>
 							</td>
-							<td>
+ 							<td>
 								<div th:text="${orderItem.getSubTotal() + '円'}"class="text-center">3,280</div>
 							</td>
-<!-- 							<td>
-								<div class="text-center">
-									<form method="post" th:action="@{/cart/delte-order-item}">
-										<input type="hidden" name="orderItemId" th:value="${orderItem.id}">
-										<button type="submit" class="btn btn-primary">削除</button>
-									</form>
-								</div>
-							</td>
- -->						</tr>
+ 						</tr>
+<!--■  -->
+ 						
 						</tbody>
 					</tbody>
 				</table>
