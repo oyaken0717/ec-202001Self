@@ -64,25 +64,26 @@ public class AdminContorller {
      * @return 売り上げグラフ画面
      */
     @RequestMapping("/graph")
-    public String graph(Model model,Integer year) {
-    	if (year == null) {
-    		year = 2020;			
-		}
-    	
-    	List<Graph> saleList = graphRepository.findByYear(year);
-        List<Integer> tates = new ArrayList<>();
-        List<Integer> yokos = new ArrayList<>();
-        for (Graph sale : saleList) {
-        	//■縦軸 入力した値から空気を読んで縦軸を作ってくれる。
-			tates.add(sale.getTotalPrice());
-			//■横軸 1〜12月までを格納する。
-			yokos.add(sale.getMonth());			
-		}
-        
-        //■ ビュー側でグラフ用の配列を受け取れるようにする。
-        model.addAttribute("yokos",yokos);
-        model.addAttribute("tates",tates);
-        model.addAttribute("DAIMEI","売上");
+    public String graph(Model model) {
+//    public String graph(Model model,Integer year) {
+//    	if (year == null) {
+//    		year = 2020;			
+//		}
+//    	
+//    	List<Graph> saleList = graphRepository.findByYear(year);
+//        List<Integer> tates = new ArrayList<>();
+//        List<Integer> yokos = new ArrayList<>();
+//        for (Graph sale : saleList) {
+//        	//■縦軸 入力した値から空気を読んで縦軸を作ってくれる。
+//			tates.add(sale.getTotalPrice());
+//			//■横軸 1〜12月までを格納する。
+//			yokos.add(sale.getMonth());			
+//		}
+//        
+//        //■ ビュー側でグラフ用の配列を受け取れるようにする。
+//        model.addAttribute("yokos",yokos);
+//        model.addAttribute("tates",tates);
+//        model.addAttribute("DAIMEI","売上");
 
         return "graph";
     }

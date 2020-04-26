@@ -28,7 +28,7 @@ import com.example.service.ToppingService;
 @Controller
 @RequestMapping("/item-detail")
 public class ItemDetailController extends HttpServlet {
-
+	
 	@Autowired
 	public ItemService itemService;
 	
@@ -47,6 +47,8 @@ public class ItemDetailController extends HttpServlet {
 		String itemNum = String.valueOf(id);
 		//■ クッキーを入れる。
 		Cookie cookie = new Cookie(itemNum, "1");
+		cookie.setPath("/");
+		cookie.setMaxAge(1000);
 		response.addCookie(cookie);
 		System.out.println("cookie2ーーーーーーーーーーーーーーーー");
 		System.out.println(cookie.getName());

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,9 +40,6 @@ public class ItemListController {
 		
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {	
-				System.out.println("cookie1-----------------");
-				System.out.println(cookie.getName());
-				System.out.println(cookie.getValue());
 				for (Item item : itemList) {
 					cookieNo = cookie.getName();
 					itemNo = String.valueOf(item.getId());
@@ -52,11 +48,8 @@ public class ItemListController {
 					}					
 				}
 			}
-		}
-		
+		}		
 		model.addAttribute("itemList", itemList);
-		System.out.println("itemListーーーーーーーーーーーーーーー");
-		System.out.println(itemList.toString());
 		return "item_list_noodle";
 	}
 }

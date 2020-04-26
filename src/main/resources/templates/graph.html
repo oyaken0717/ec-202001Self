@@ -2,45 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <title>折れ線グラフサンプル</title>
 </head>
 <body>
-<!--             labels: /*[[ ${label} ]]*/, -->
-	<form th:action="@{/admin/graph}">
-		<select name = "year" size="1">
-        	<option>2020</option>
-        	<option>2021</option>
-		</select>
-		<button type="submit">送信</button>
-	</form>
-    <canvas id="ChartDemo"></canvas>
-    
-    <script type="text/javascript" th:inline="javascript">
-	<!--■ /*[[ ${label} ]]*/でmodelの展開ができる!! -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>    
+ 
+<!--■ form -->   
+	<select id="year">
+		<option value="2020">2020</option>
+		<option value="2021">2021</option>
+	</select>
 
-    var ctx = document.getElementById("ChartDemo").getContext('2d');
-    var ChartDemo = new Chart(ctx, {
-        type: 'line',
-        data: {
-            // コントローラーで格納したlabelを変数式で取り出すだけ。
-            labels: /*[[ ${yokos} ]]*/,
-            datasets: [
-                {
-                    label: /*[[ ${DAIMEI} ]]*/,
-                    borderColor: 'rgb(255, 0, 0)',
-                    lineTension: 0,
-                    fill: false,
-                    // 上記と同様、pointを変数式で取り出しているだけです。
-                    data: /*[[ ${tates} ]]*/,
-                },
-            ]
-        },
-        options: {
-            responsive: true,
-        }
-    });
-    /*]]>*/
-    </script>
+<!--■ チャート -->
+    <canvas id="graph"></canvas>
+    
+	<script th:src="@{/js/chart.js}" th:inline="javascript"></script>
 </body>
 </html>
