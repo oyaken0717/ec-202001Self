@@ -1,5 +1,7 @@
 package com.example.form;
 
+import javax.validation.constraints.NotBlank;
+
 public class RegisterUserForm {
 
 	/** 名前 */
@@ -7,6 +9,8 @@ public class RegisterUserForm {
 	/** メール */
 	private String email;
 	/** パスワード */
+//	@Pattern(regexp="^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\d)[a-zA-Z\\d]{8,100}$", message="8文字以上32文字以下、半角英字(大文字)、半角英字(小文字)、半角数字をそれぞれ1種類以上使う")
+	@NotBlank(message = "パスワードを入力してください")
 	private String password;
 	/** 確認パスワード */
 	private String confirmationPassword;
