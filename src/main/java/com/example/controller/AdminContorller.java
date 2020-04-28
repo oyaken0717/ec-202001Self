@@ -1,7 +1,5 @@
 package com.example.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.domain.Graph;
 import com.example.domain.LoginUser;
 import com.example.domain.Order;
-import com.example.repository.GraphRepository;
 import com.example.service.AdminService;
 import com.example.service.OrderService;
 
@@ -26,10 +22,7 @@ public class AdminContorller {
 
 	@Autowired
 	private OrderService orderService;
-	
-	@Autowired
-	private GraphRepository graphRepository;
-	
+		
 	/**
 	 * 管理者機能のまとめ画面へ
 	 * 

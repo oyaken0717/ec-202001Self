@@ -1,10 +1,20 @@
 /*<![CDATA[*/
+//■ ajaxでトークンを送る方法 
+//https://stackoverflow.com/questions/57994953/ajax-request-with-spring-security-gives-403-forbidden
+
 //■ 変数の展開: いつもの ${}に /*[[ と ]]*/ をつける。
 $(function(){
 	$('#year').on("change", function() {
 		var hostUrl = 'http://localhost:8080/chart/graph';
 		var year = $("#year").val();
+//■ ajax Token通す。
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 
+		$(document).ajaxSend(function(e, xhr, options) {
+		    xhr.setRequestHeader(header, token);
+		});	
+		
 		$.ajax({
 			url : hostUrl,
 			type : 'POST',
@@ -81,7 +91,7 @@ $(function(){
 				}
 			});
 						
-		}).fail(function(){
+		}).fail(function(XMLHttpRequest, textStatus, errorThrown){
 			alert("エラーが発生しました！");
 			console.log("XMLHttpRequest : " + XMLHttpRequest.status);
 			console.log("textStatus     : " + textStatus);
