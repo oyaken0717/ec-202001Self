@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>折れ線グラフサンプル</title>
+<!--■① ajaxでトークンを送る設定  -->
+	<sec:csrfMetaTags />
+ 	<meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>    
  
- 	<meta name="_csrf" content="${_csrf.token}"/>
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 
 <!--■ form -->   
 	<select id="year">

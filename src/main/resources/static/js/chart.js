@@ -7,18 +7,30 @@ $(function(){
 	$('#year').on("change", function() {
 		var hostUrl = 'http://localhost:8080/chart/graph';
 		var year = $("#year").val();
-//■ ajax Token通す。
+//■① ajax Token通す。
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-
 		$(document).ajaxSend(function(e, xhr, options) {
 		    xhr.setRequestHeader(header, token);
 		});	
+
+//	    var token = $("input[name='_csrf']").val();
+//	    var header = "X-CSRF-TOKEN";
+//	    $(document).ajaxSend(function(e, xhr, options) {
+//	        xhr.setRequestHeader(header, token);
+//	    });
+		
 		
 		$.ajax({
 			url : hostUrl,
 			type : 'POST',
 			dataType : 'json',
+//■② headersにセットする。 			
+//			headers: {
+//				    'X-HTTP-Method-Override': 'PUT',
+//				    'Content-Type': 'application/json'
+//			},
+//			headers: {"X-CSRF-TOKEN": $("input[name='_csrf']").val()},
 			data : {
 				year : year
 			},
