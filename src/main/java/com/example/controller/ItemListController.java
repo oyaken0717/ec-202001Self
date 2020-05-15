@@ -49,7 +49,7 @@ public class ItemListController {
 				}
 			}
 		}		
-		model.addAttribute("itemList", itemList);
+		model.addAttribute("itemList", itemList);		
 		return "item_list_noodle";
 	}
 }

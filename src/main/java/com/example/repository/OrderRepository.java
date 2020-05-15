@@ -190,7 +190,7 @@ public class OrderRepository {
 					+ "VALUES (cast(to_char(CURRENT_TIMESTAMP, 'yyyymmdd')||to_char(nextval('ORDER_CODE_SEQ'),'FM000000') AS bigint), "
 					+ " ?, ?, ?) RETURNING id";
 			
-			long id = jdbcTemplate.queryForObject(sql, long.class,userId, status, totalPrice);
+			long id = jdbcTemplate.queryForObject(sql, long.class, userId, status, totalPrice);
 			order.setId(id);
 		} else {
 			StringBuilder sql=new StringBuilder();
@@ -216,6 +216,9 @@ public class OrderRepository {
 	}
 
 	public Order findByUserIdAndStatus(Integer userId, Integer status) {
+		System.out.println("■ OrderRepository/findByUserIdAndStatus/session.getId().hashCode();---------------------------------");
+		System.out.println("userId");
+		System.out.println(userId);
 		
 		StringBuilder sql = new StringBuilder();
 //■商品
@@ -251,8 +254,15 @@ public class OrderRepository {
 		
 		List<Order> orderList = template.query(sql.toString(), param, ORDER_RESULT_SET_EXTRACTOR);
 		if (orderList.size() > 0) {
+			System.out.println("■①ifの中 OrderRepository/findByUserIdAndStatus/orderList.size();---------------------------------");
+			System.out.println("orderList.size()");
+			System.out.println(orderList.size());
 			return orderList.get(0);
 		}
+		System.out.println("■②null OrderRepository/findByUserIdAndStatus/---------------------------------");
+		System.out.println("orderList.size()");
+		System.out.println(orderList.size());
+
 		return null;
 	}
 	
@@ -396,7 +406,24 @@ public class OrderRepository {
 		}
 		return orderList;
 	}
-
+	
+	/**
+	 * 未ログイン時に作ったカート(Order)を<br>
+	 * OrderのIDを元に削除する.
+	 * 
+	 * @param orderId 未ログイン時に作ったカート(Order)のID
+	 */
+	public void deleteByOrderId(Long orderId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("DELETE ");
+		sql.append("FROM ");
+		sql.append(" orders ");
+		sql.append("WHERE ");
+		sql.append(" id = :id");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", orderId);
+		template.update(sql.toString(), param);
+	}
+	
 	public void deleteById(Integer id) {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id",id);
 		String sql = "WITH deleted AS (DELETE FROM order_items WHERE id = :id RETURNING id)"

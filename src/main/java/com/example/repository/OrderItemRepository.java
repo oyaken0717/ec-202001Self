@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -42,5 +43,25 @@ public class OrderItemRepository {
 			// ■UPDATE処理
 		}
 		return orderItem;
+	}
+	
+	/**
+	 * 注文したラーメン(OrderItem)の「カート(Order)」のIDを<br>
+	 * 未ログインのOrderのIDから<br>
+	 * ログイン済のOrderのIDへ変更する。 
+	 * 
+	 * @param beforeLoginOrderId 未ログインの時に発行したOrderのID
+	 * @param loginOrderId ログイン後に発行した未入金(status:0)のOrderのID
+	 */
+	public void changeOrderId(Long beforeLoginOrderId,Long loginOrderId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE ");
+		sql.append(" order_items ");
+		sql.append("SET ");
+		sql.append(" order_id = :login_order_id ");
+		sql.append("WHERE ");
+		sql.append(" order_id = :before_login_order_id");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("before_login_order_id", beforeLoginOrderId).addValue("login_order_id", loginOrderId);
+		template.update(sql.toString(), param);
 	}
 }

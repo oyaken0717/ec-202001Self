@@ -38,7 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 									"/img/**", 
 									"/js/**", 
 									"/fonts/**",
-									"/img_noodle/**"
+									"/img_noodle/**",
+									"/chart/graph"
 									);
 	}
 

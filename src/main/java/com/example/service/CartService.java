@@ -105,8 +105,28 @@ public class CartService {
 	}
 
 	public Order findByUserIdAndStatus(Integer userId, Integer status) {
+		System.out.println("■ CartService/findByUserIdAndStatus/session.getId().hashCode();---------------------------------");
+		System.out.println("userId");
+		System.out.println(userId);
 		Order order = orderRepository.findByUserIdAndStatus(userId, status);
 		return order;
+	}
+	
+	/**
+	 * 注文したラーメン(OrderItem)の「カート(Order)」のIDを<br>
+	 * 未ログインのOrderのIDから<br>
+	 * ログイン済のOrderのIDへ変更する。
+	 *  
+	 * @param beforeLoginOrderId 未ログインの時に発行したOrderのID
+	 * @param loginOrderId ログイン後に発行した未入金(status:0)のOrderのID
+	 * 
+	 */
+	public void changeOrderId(Long beforeLoginOrderId,Long loginOrderId) {
+		orderItemRepository.changeOrderId(beforeLoginOrderId, loginOrderId);
+	}
+	
+	public void deleteByOrderId(Long orderId) {
+		orderRepository.deleteByOrderId(orderId);
 	}
 	
 	public void delteOrderItem(Integer orderItemId) {

@@ -50,9 +50,6 @@ public class ItemDetailController extends HttpServlet {
 		cookie.setPath("/");
 		cookie.setMaxAge(1000);
 		response.addCookie(cookie);
-		System.out.println("cookie2ーーーーーーーーーーーーーーーー");
-		System.out.println(cookie.getName());
-		System.out.println(cookie.getValue());
 		
 		//■ 商品詳細をloadする。
 		Item item = itemService.load(id);
