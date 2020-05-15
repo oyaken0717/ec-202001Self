@@ -66,6 +66,9 @@ public class OrderController {
 	@RequestMapping("/to-order-confirm")
 	public String toOrderConfirm(@AuthenticationPrincipal LoginUser loginUser, Model model) {
 		Integer userId = session.getId().hashCode();
+		if (loginUser == null) {
+			return "redirect:/login-user/to-login";
+		}
 		if (loginUser != null) {
 			userId = loginUser.getUser().getId();
 		}

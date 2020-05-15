@@ -36,7 +36,7 @@ public class CartContorller {
 		// ※文字列化している > hashCode()で数値化する。
 //		Integer userId = (Integer)session.getId().hashCode();
 		Integer userId = (Integer)session.getAttribute("userId");
-		System.out.println("■ CartContorller/addCart/(Integer)session.getAttribute(\"userId\");---------------------------------");
+		System.out.println("■ CartContorller/addCart/(Integer)session.getAttribute(\"userId\");=========================================");
 		System.out.println("userId");
 		System.out.println(userId);
 
