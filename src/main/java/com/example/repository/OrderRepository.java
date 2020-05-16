@@ -87,9 +87,9 @@ public class OrderRepository {
 				order.setPaymentMethod(rs.getInt("order_payment_method"));
 				order.setOrderItemList(orderItemList);
 				//■ User情報を追加
-				User user = new User();
-				user.setName(rs.getString("user_name"));
-				order.setUser(user);
+//				User user = new User();
+//				user.setName(rs.getString("user_name"));
+//				order.setUser(user);
 				orderList.add(order);
 			}
 			if (rs.getInt("orderitem_id") != beforeOrderItemId && rs.getInt("orderitem_id") != beforeOrderId) {
@@ -216,16 +216,13 @@ public class OrderRepository {
 	}
 
 	public Order findByUserIdAndStatus(Integer userId, Integer status) {
-		System.out.println("■ OrderRepository/findByUserIdAndStatus/session.getId().hashCode();---------------------------------");
-		System.out.println("userId");
-		System.out.println(userId);
 		
 		StringBuilder sql = new StringBuilder();
 //■商品
 		sql.append("SELECT i.id item_id,i.name item_name,i.description item_description,i.price_m item_price_m,");
 		sql.append("i.price_l item_price_l,i.image_path item_image_path,i.deleted item_deleted,");
 //■ user
-		sql.append(" u.name user_name, ");
+//		sql.append(" u.name user_name, ");
 //■注文(長い)
 		sql.append("o.id order_id,o.user_id order_user_id,o.status order_status,o.total_price order_total_price,");
 		sql.append(
@@ -244,7 +241,7 @@ public class OrderRepository {
 		sql.append("FROM orders o JOIN order_items oi ON o.id = oi.order_id ");
 // ②LEFT OUTER JOIN > 基本LEFT OUTER JOINでOK > 左側に右側をくっつける > 右なくてもエラーにならない。 
 		sql.append("LEFT OUTER JOIN order_toppings ot ON oi.id = ot.order_item_id ");
-		sql.append(" INNER JOIN            users u     ON o.user_id = u.id ");
+//		sql.append(" INNER JOIN            users u     ON o.user_id = u.id ");
 		sql.append("INNER JOIN items i ON oi.item_id = i.id LEFT OUTER JOIN toppings t ON ot.topping_id = t.id ");
 //■WHERE
 //		sql.append("WHERE o.user_id = :user_id AND o.status = :status ORDER BY oi.id");
@@ -254,15 +251,8 @@ public class OrderRepository {
 		
 		List<Order> orderList = template.query(sql.toString(), param, ORDER_RESULT_SET_EXTRACTOR);
 		if (orderList.size() > 0) {
-			System.out.println("■①ifの中 OrderRepository/findByUserIdAndStatus/orderList.size();---------------------------------");
-			System.out.println("orderList.size()");
-			System.out.println(orderList.size());
 			return orderList.get(0);
 		}
-		System.out.println("■②null OrderRepository/findByUserIdAndStatus/---------------------------------");
-		System.out.println("orderList.size()");
-		System.out.println(orderList.size());
-
 		return null;
 	}
 	
@@ -336,8 +326,6 @@ public class OrderRepository {
 	}
 
 	public List<Order> isJoinFalse(Integer userId) {
-		System.out.println("--------------------");
-		System.out.println("falseパターン");
 		StringBuilder sql = new StringBuilder();
 //■ Order
 		sql.append("SELECT ");

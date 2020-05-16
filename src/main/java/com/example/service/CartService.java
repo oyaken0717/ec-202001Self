@@ -105,9 +105,6 @@ public class CartService {
 	}
 
 	public Order findByUserIdAndStatus(Integer userId, Integer status) {
-		System.out.println("■ CartService/findByUserIdAndStatus/session.getId().hashCode();---------------------------------");
-		System.out.println("userId");
-		System.out.println(userId);
 		Order order = orderRepository.findByUserIdAndStatus(userId, status);
 		return order;
 	}
