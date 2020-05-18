@@ -36,6 +36,7 @@ public class CartContorller {
 		// ※文字列化している > hashCode()で数値化する。
 //		Integer userId = (Integer)session.getId().hashCode();
 		Integer userId = (Integer)session.getAttribute("userId");
+		
 		if(userId == null) {
 			session.setAttribute("userId", session.getId().hashCode());
 		}
@@ -44,9 +45,6 @@ public class CartContorller {
 			// ■ログインしている。 > そこからuserのIDを取ってくる。
 			userId = loginUser.getUser().getId();
 		}
-		System.out.println("=============");
-		System.out.println("userId");
-		System.out.println(userId);
 		cartService.insert(form, userId);
 		return "redirect:/cart/show-cart-list";
 	}
@@ -71,7 +69,7 @@ public class CartContorller {
 		//■ ログイン「後」のUserのidを元にカートの情報を探す
 		Order loginOrder = new Order();
 		if (loginUser != null) {
-			loginOrder = cartService.findByUserIdAndStatus(userId, 0);
+			loginOrder = cartService.findByUserIdAndStatus(loginUser.getUser().getId(), 0);
 			userId = loginUser.getUser().getId();
 		}
 		
